@@ -1,0 +1,180 @@
+/* ==========================================================================
+   THE BUTTERFLY PRELUDE — CINEMATIC MONARCH AWAKENING
+   ========================================================================== */
+
+.butterfly-prelude-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  overflow: hidden;
+  z-index: 1000;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+/* Accessible hit target */
+.butterfly-trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  margin-left: -90px;
+  margin-top: -90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 50%;
+  touch-action: manipulation;
+  z-index: 1020;
+}
+
+.butterfly-trigger:focus-visible {
+  outline: 2px dashed rgba(255, 140, 0, 0.6);
+  outline-offset: 8px;
+}
+
+/* Flight mesh with 3D perspective */
+.butterfly-flight-mesh {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 138px;
+  margin-left: -125px;
+  margin-top: -69px;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 1015;
+  will-change: transform;
+}
+
+@media (max-width: 640px) {
+  .butterfly-flight-mesh {
+    width: 180px;
+    height: 100px;
+    margin-left: -90px;
+    margin-top: -50px;
+  }
+}
+
+/* Wing layers */
+.monarch-wing-left-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transform-origin: 100% 30%;
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+}
+
+.monarch-wing-right-wrap {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  transform-origin: 0% 30%;
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+}
+
+.monarch-wing-img-left {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.95));
+}
+
+.monarch-wing-img-right {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.95));
+}
+
+/* Body layer: full canvas overlay perfectly aligning antennae & body with wings */
+.monarch-body-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.monarch-body-img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.98));
+}
+
+/* Radial awakening ripple ring */
+.awakening-shockwave {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 136, 0.85);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.7), inset 0 0 20px rgba(0, 255, 136, 0.4);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: shockwaveExpand 1.4s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+}
+
+.awakening-shockwave-secondary {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 140, 0, 0.75);
+  box-shadow: 0 0 35px rgba(255, 140, 0, 0.55);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: shockwaveExpand 1.6s 0.1s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+}
+
+@keyframes shockwaveExpand {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    width: 320vmax;
+    height: 320vmax;
+    opacity: 0;
+  }
+}
+
+/* Particle dispersal on touch */
+.dispersal-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background-color: #00FF88;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00FF88, 0 0 16px rgba(0, 255, 136, 0.8);
+  pointer-events: none;
+}

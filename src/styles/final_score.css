@@ -1,0 +1,825 @@
+/* ==========================================================================
+   FINAL CANDIDATE SCORE SCREEN // STYLES
+   Matrix-inspired Cinematic Results Experience
+   ========================================================================== */
+
+.final-score-section {
+  min-height: 100vh;
+  padding: clamp(64px, 7vw, 100px) 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid rgba(0, 255, 136, 0.25);
+  background-color: #050807;
+  overflow: hidden;
+}
+
+/* Ambient Radial Lighting */
+.final-ambient-glow {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  width: clamp(300px, 60vw, 750px);
+  max-width: 95vw;
+  height: clamp(300px, 60vw, 750px);
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, rgba(7, 26, 16, 0.04) 50%, transparent 75%);
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* --------------------------------------------------------------------------
+   LOCKED / PENDING EVALUATION STATE (When < 4 Exhibits Completed)
+   -------------------------------------------------------------------------- */
+.evaluation-locked-container {
+  max-width: 860px;
+  margin: 0 auto;
+  background: #071710;
+  border: 1.5px solid rgba(0, 255, 136, 0.3);
+  border-radius: 20px;
+  padding: clamp(28px, 4vw, 48px) clamp(20px, 3.5vw, 36px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  position: relative;
+  z-index: 1;
+}
+
+.locked-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: #FBBF24;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.locked-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+  font-weight: 800;
+  color: #E4F0E8;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.locked-description {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: #87968D;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+
+/* Pending Exhibits Checklist */
+.locked-checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.locked-exhibit-card {
+  background: #050B08;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.2s ease;
+}
+
+.locked-exhibit-card.completed {
+  border-color: rgba(0, 255, 136, 0.4);
+  background: #081D12;
+}
+
+.locked-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.locked-card-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: #E4F0E8;
+  margin: 4px 0 0;
+}
+
+.locked-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #071A10;
+  border: 1px solid #00FF88;
+  color: #00FF88;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.locked-jump-btn:hover {
+  background: #00FF88;
+  color: #050807;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   CINEMATIC COMPLETION OPENING HERO
+   -------------------------------------------------------------------------- */
+.completion-hero-banner {
+  text-align: center;
+  margin-bottom: clamp(36px, 5vw, 56px);
+  position: relative;
+  z-index: 1;
+}
+
+.completion-kicker {
+  font-family: monospace;
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #00FF88;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 4px 14px;
+  background: rgba(0, 255, 136, 0.1);
+  border-radius: 9999px;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.completion-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin: 0 0 16px 0;
+  text-shadow: 0 0 40px rgba(0, 255, 136, 0.25);
+}
+
+.completion-hero-subtext {
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  color: #C2D8C9;
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   PREMIUM DIGITAL CANDIDATE RESULT CARD
+   -------------------------------------------------------------------------- */
+.candidate-result-card {
+  max-width: 980px;
+  margin: 0 auto 48px;
+  background: linear-gradient(180deg, #071710 0%, #050E09 100%);
+  border: 2px solid #00FF88;
+  border-radius: 20px;
+  padding: clamp(28px, 4.5vw, 52px) clamp(20px, 4vw, 44px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 255, 136, 0.18);
+  position: relative;
+  z-index: 1;
+}
+
+/* Reticle Corner Brackets */
+.reticle-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.reticle-tl { top: 10px; left: 10px; border-top: 2px solid #00FF88; border-left: 2px solid #00FF88; }
+.reticle-tr { top: 10px; right: 10px; border-top: 2px solid #00FF88; border-right: 2px solid #00FF88; }
+.reticle-bl { bottom: 10px; left: 10px; border-bottom: 2px solid #00FF88; border-left: 2px solid #00FF88; }
+.reticle-br { bottom: 10px; right: 10px; border-bottom: 2px solid #00FF88; border-right: 2px solid #00FF88; }
+
+/* Card Header */
+.card-top-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 20px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.report-institution-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.report-series-tag {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #00FF88;
+  text-transform: uppercase;
+}
+
+.report-document-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-weight: 800;
+  color: #E4F0E8;
+  letter-spacing: -0.01em;
+}
+
+.candidate-id-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  padding: 6px 14px;
+  border-radius: 8px;
+}
+
+.candidate-name-text {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Candidate Name Input Toggle */
+.candidate-name-input {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #00FF88;
+  color: #00FF88;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  outline: none;
+  max-width: 180px;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   CORE SCORE & PROGRESS RING DISPLAY
+   -------------------------------------------------------------------------- */
+.score-hero-display {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  margin-bottom: 36px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 768px) {
+  .score-hero-display {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+}
+
+/* Circular Progress Visual */
+.score-ring-wrapper {
+  position: relative;
+  width: clamp(150px, 20vw, 190px);
+  height: clamp(150px, 20vw, 190px);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-ring-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.score-ring-bg {
+  stroke: rgba(255, 255, 255, 0.08);
+  fill: none;
+}
+
+.score-ring-fill {
+  fill: none;
+  stroke: #00FF88;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
+}
+
+.score-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.score-ring-percent {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.score-ring-label {
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #87968D;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Animated Big Score Numbers */
+.score-number-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .score-number-group {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.score-label-kicker {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #00FF88;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.score-big-counter {
+  font-family: var(--font-display);
+  font-size: clamp(3.8rem, 8vw, 6.2rem);
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  text-shadow: 0 0 35px rgba(0, 255, 136, 0.3);
+}
+
+.score-max-tag {
+  font-family: monospace;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  font-weight: 700;
+  color: #00FF88;
+  letter-spacing: -0.02em;
+}
+
+/* Metadata Indicators Row */
+.score-meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .score-meta-pills {
+    justify-content: center;
+  }
+}
+
+.score-meta-pill {
+  font-family: monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #C2D8C9;
+}
+
+/* --------------------------------------------------------------------------
+   PERFORMANCE TITLE BADGE & ASSESSMENT
+   -------------------------------------------------------------------------- */
+.performance-tier-container {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(0, 255, 136, 0.35);
+  border-radius: 14px;
+  padding: clamp(20px, 3vw, 28px);
+  margin-bottom: 36px;
+  text-align: left;
+}
+
+.performance-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  border: 1px solid currentColor;
+}
+
+.performance-tier-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.25vw, 1.08rem);
+  line-height: 1.65;
+  color: #E4F0E8;
+  margin: 0 0 10px 0;
+}
+
+.performance-tier-disclaimer {
+  font-family: monospace;
+  font-size: 11px;
+  color: #87968D;
+  font-style: italic;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   EXHIBIT-WISE SCORE BREAKDOWN
+   -------------------------------------------------------------------------- */
+.breakdown-section-title {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #00FF88;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exhibit-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+  text-align: left;
+}
+
+@media (max-width: 720px) {
+  .exhibit-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.breakdown-card {
+  background: #08170F;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.breakdown-card:hover {
+  border-color: rgba(0, 255, 136, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.breakdown-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.breakdown-exhibit-num {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #00FF88;
+  text-transform: uppercase;
+}
+
+.breakdown-exhibit-name {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 2px 0 0 0;
+}
+
+.breakdown-score-badge {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.breakdown-score-value {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: 800;
+  color: #00FF88;
+}
+
+.breakdown-score-max {
+  font-family: monospace;
+  font-size: 11px;
+  color: #87968D;
+}
+
+/* Progress bar */
+.breakdown-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.breakdown-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00FF88, #33FFAA);
+  border-radius: 9999px;
+  transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   FINAL TAKEAWAY DIRECTIVE
+   -------------------------------------------------------------------------- */
+.final-takeaway-box {
+  background: #040A07;
+  border-left: 3px solid #00FF88;
+  border-radius: 0 12px 12px 0;
+  padding: 24px 28px;
+  margin-bottom: 40px;
+  text-align: left;
+  border-top: 1px solid rgba(0, 255, 136, 0.15);
+  border-right: 1px solid rgba(0, 255, 136, 0.1);
+  border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.takeaway-tag {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #00FF88;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.takeaway-headline {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.01em;
+}
+
+.takeaway-text {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.65;
+  color: #C2D8C9;
+  margin: 0;
+}
+
+.takeaway-signature {
+  font-family: monospace;
+  font-size: 11px;
+  color: #87968D;
+  margin-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   ACTION BUTTONS
+   -------------------------------------------------------------------------- */
+.final-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn-complete-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: #00FF88;
+  color: #050807;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+  cursor: default;
+}
+
+.btn-print-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 28px;
+  background: #071C11;
+  border: 1.5px solid #00FF88;
+  color: #00FF88;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-print-export:hover {
+  background: #00FF88;
+  color: #050807;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.btn-new-visitor {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 28px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #E4F0E8;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-new-visitor:hover {
+  border-color: #FF4B4B;
+  color: #FF6B6B;
+  background: rgba(255, 75, 75, 0.1);
+}
+
+/* --------------------------------------------------------------------------
+   PRINT STYLES FOR CLEAN CANDIDATE REPORT CARD EXPORT
+   -------------------------------------------------------------------------- */
+@media print {
+  /* Hide page noise and chrome */
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  .subtle-progress-bar,
+  .digital-rain-canvas,
+  .archive-drawer-overlay,
+  .final-actions-row,
+  .final-ambient-glow,
+  .reticle-corner,
+  #scene-00,
+  #exhibit-01,
+  #exhibit-01b,
+  #exhibit-01-activity,
+  #exhibit-02,
+  #exhibit-02-activity,
+  #exhibit-03,
+  #exhibit-03-activity,
+  #exhibit-04,
+  #exhibit-04-activity,
+  #archive-colophon {
+    display: none !important;
+  }
+
+  .final-score-section {
+    padding: 0 !important;
+    background: #FFFFFF !important;
+    border: none !important;
+    min-height: auto !important;
+  }
+
+  .candidate-result-card {
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    padding: 24px !important;
+    max-width: 100% !important;
+  }
+
+  .report-series-tag,
+  .score-label-kicker,
+  .score-max-tag,
+  .breakdown-exhibit-num,
+  .breakdown-score-value,
+  .takeaway-tag {
+    color: #006633 !important;
+  }
+
+  .completion-hero-title,
+  .report-document-title,
+  .candidate-name-text,
+  .score-big-counter,
+  .breakdown-exhibit-name,
+  .takeaway-headline {
+    color: #000000 !important;
+  }
+
+  .completion-hero-subtext,
+  .performance-tier-desc,
+  .takeaway-text,
+  .locked-description {
+    color: #333333 !important;
+  }
+
+  .score-ring-svg {
+    filter: none !important;
+  }
+
+  .score-ring-fill {
+    stroke: #006633 !important;
+  }
+
+  .score-ring-percent {
+    color: #000000 !important;
+  }
+
+  .breakdown-card {
+    background: #F4F6F5 !important;
+    border: 1px solid #CCCCCC !important;
+  }
+
+  .breakdown-bar-track {
+    background: #E0E0E0 !important;
+  }
+
+  .breakdown-bar-fill {
+    background: #006633 !important;
+  }
+
+  .performance-tier-container {
+    background: #F4F6F5 !important;
+    border: 1.5px solid #006633 !important;
+  }
+
+  .final-takeaway-box {
+    background: #F9F9F9 !important;
+    border-left: 3px solid #006633 !important;
+  }
+}

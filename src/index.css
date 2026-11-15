@@ -1,0 +1,19 @@
+/* index.css - Root entry styling */
+@import "tailwindcss";
+@import './styles/tokens.css';
+@import './styles/typography.css';
+@import './styles/animations.css';
+@import './styles/layout.css';
+
+/* Utility classes for responsive displays */
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hidden-tablet {
+    display: none !important;
+  }
+}

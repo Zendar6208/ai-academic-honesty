@@ -1,0 +1,610 @@
+/* ==========================================================================
+   ETHICAL OR NOT? — SWIPE CLASSIFICATION ACTIVITY STYLES
+   Interactive swipe-based ethical discernment game for Exhibit 03
+   ========================================================================== */
+
+.swipe-game-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Header Status Bar
+   -------------------------------------------------------------------------- */
+.swipe-header-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.22);
+}
+
+.swipe-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.swipe-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #00FF88;
+  box-shadow: 0 0 10px #00FF88;
+  flex-shrink: 0;
+  animation: swipePulse 2s infinite ease-in-out;
+}
+
+@keyframes swipePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.swipe-header-title {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #00FF88;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: block;
+}
+
+.swipe-header-subtitle {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #87968D;
+  margin-top: 2px;
+}
+
+.swipe-header-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.swipe-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background-color: #091710;
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  font-family: monospace;
+  font-size: 12px;
+  color: #E4F0E8;
+}
+
+.swipe-score-pill {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.18), rgba(0, 255, 136, 0.05));
+  border-color: #00FF88;
+  color: #00FF88;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(0, 255, 136, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   Level Progress Indicators
+   -------------------------------------------------------------------------- */
+.swipe-level-tracker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: rgba(7, 26, 16, 0.75);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.swipe-level-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.swipe-question-dot {
+  width: 18px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.12);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .swipe-level-tracker {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .swipe-level-dots {
+    justify-content: center;
+    gap: 4px;
+  }
+  .swipe-question-dot {
+    width: 14px;
+    height: 5px;
+  }
+}
+
+.swipe-question-dot.completed-correct {
+  background-color: #00FF88;
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
+}
+
+.swipe-question-dot.completed-incorrect {
+  background-color: #FFB800;
+}
+
+.swipe-question-dot.current {
+  background-color: #E4F0E8;
+  box-shadow: 0 0 8px #E4F0E8;
+  transform: scaleY(1.3);
+}
+
+/* --------------------------------------------------------------------------
+   Level Transition Banner (when entering a new level)
+   -------------------------------------------------------------------------- */
+.swipe-level-banner {
+  background: linear-gradient(135deg, #071A10 0%, #0D2619 100%);
+  border: 2px solid #00FF88;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 255, 136, 0.2);
+  animation: levelBannerSlide 0.4s ease-out;
+}
+
+@keyframes levelBannerSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --------------------------------------------------------------------------
+   Swipe Arena & Main Situation Card
+   -------------------------------------------------------------------------- */
+.swipe-arena {
+  position: relative;
+  width: 100%;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  touch-action: pan-y;
+  perspective: 1000px;
+}
+
+.swipe-card {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  background: #08140E;
+  border: 2px solid rgba(0, 255, 136, 0.35);
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 255, 136, 0.08);
+  cursor: grab;
+  will-change: transform, opacity;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.swipe-card.dragging {
+  cursor: grabbing;
+}
+
+.swipe-card:hover {
+  border-color: rgba(0, 255, 136, 0.6);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(0, 255, 136, 0.18);
+}
+
+/* --------------------------------------------------------------------------
+   Swipe Directional Overlays / Glowing Badges
+   -------------------------------------------------------------------------- */
+.swipe-badge-overlay {
+  position: absolute;
+  top: 24px;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 20;
+  transition: opacity 0.1s linear;
+}
+
+.swipe-badge-ethical {
+  right: 28px;
+  background-color: rgba(0, 255, 136, 0.18);
+  border: 2px solid #00FF88;
+  color: #00FF88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+  transform: rotate(8deg);
+}
+
+.swipe-badge-non-ethical {
+  left: 28px;
+  background-color: rgba(255, 75, 75, 0.18);
+  border: 2px solid #FF4B4B;
+  color: #FF6B6B;
+  box-shadow: 0 0 20px rgba(255, 75, 75, 0.4);
+  transform: rotate(-8deg);
+}
+
+/* --------------------------------------------------------------------------
+   Situation Card Content Layout
+   -------------------------------------------------------------------------- */
+.swipe-card-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.swipe-card-tag {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #00FF88;
+  background-color: rgba(0, 255, 136, 0.12);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+}
+
+.swipe-scenario-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: #E4F0E8;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+.swipe-situation-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 1.8vw, 1.3rem);
+  line-height: 1.65;
+  color: #FFFFFF;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Scenario Icon Illustration
+   -------------------------------------------------------------------------- */
+.swipe-scenario-illustration {
+  width: 100%;
+  height: 120px;
+  background: #040A07;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   Controls & Buttons (Always accessible, clearly visible)
+   -------------------------------------------------------------------------- */
+.swipe-actions-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.swipe-btn {
+  flex: 1;
+  max-width: 280px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-radius: 14px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.swipe-btn-non-ethical {
+  background: #140A0A;
+  border: 2px solid #FF4B4B;
+  color: #FFA5A5;
+}
+
+.swipe-btn-non-ethical:hover {
+  background: #251010;
+  border-color: #FF6B6B;
+  color: #FFFFFF;
+  box-shadow: 0 0 25px rgba(255, 75, 75, 0.4);
+  transform: translateY(-2px);
+}
+
+.swipe-btn-non-ethical:active {
+  transform: translateY(1px);
+}
+
+.swipe-btn-ethical {
+  background: #071C11;
+  border: 2px solid #00FF88;
+  color: #00FF88;
+}
+
+.swipe-btn-ethical:hover {
+  background: #0A2E1C;
+  border-color: #33FFAA;
+  color: #FFFFFF;
+  box-shadow: 0 0 25px rgba(0, 255, 136, 0.45);
+  transform: translateY(-2px);
+}
+
+.swipe-btn-ethical:active {
+  transform: translateY(1px);
+}
+
+/* --------------------------------------------------------------------------
+   Feedback State Card
+   -------------------------------------------------------------------------- */
+.swipe-feedback-card {
+  width: 100%;
+  max-width: 680px;
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+  animation: feedbackFadeIn 0.35s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes feedbackFadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.swipe-feedback-correct {
+  background: linear-gradient(135deg, #071C11 0%, #0B2B1B 100%);
+  border: 2px solid #00FF88;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 255, 136, 0.25);
+}
+
+.swipe-feedback-incorrect {
+  background: linear-gradient(135deg, #1C1207 0%, #291C09 100%);
+  border: 2px solid #FFB800;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 184, 0, 0.25);
+}
+
+.swipe-feedback-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.swipe-feedback-badge.correct {
+  background: rgba(0, 255, 136, 0.15);
+  border: 1px solid #00FF88;
+  color: #00FF88;
+}
+
+.swipe-feedback-badge.incorrect {
+  background: rgba(255, 184, 0, 0.15);
+  border: 1px solid #FFB800;
+  color: #FFB800;
+}
+
+.swipe-truth-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 18px;
+}
+
+.swipe-truth-ethical {
+  background: #0D3320;
+  border: 1px solid #00FF88;
+  color: #00FF88;
+}
+
+.swipe-truth-non-ethical {
+  background: #331515;
+  border: 1px solid #FF4B4B;
+  color: #FFA5A5;
+}
+
+.swipe-explanation-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 3px solid #00FF88;
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 24px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: #E4F0E8;
+}
+
+.swipe-feedback-incorrect .swipe-explanation-box {
+  border-left-color: #FFB800;
+}
+
+.swipe-next-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  background: #00FF88;
+  color: #050807;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+  transition: all 0.2s ease;
+}
+
+.swipe-next-btn:hover {
+  background: #33FFAA;
+  box-shadow: 0 6px 30px rgba(0, 255, 136, 0.6);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   Activity Completion Showcase
+   -------------------------------------------------------------------------- */
+.swipe-complete-container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #06110B;
+  border: 2px solid #00FF88;
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(0, 255, 136, 0.2);
+  animation: feedbackFadeIn 0.4s ease-out;
+}
+
+.swipe-score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.12) 0%, rgba(0, 255, 136, 0.02) 100%);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  margin-bottom: 28px;
+}
+
+.swipe-score-number {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #00FF88;
+  text-shadow: 0 0 24px rgba(0, 255, 136, 0.5);
+  margin-bottom: 8px;
+}
+
+.swipe-level-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 640px) {
+  .swipe-level-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.swipe-level-card {
+  background: #091710;
+  border: 1px solid rgba(0, 255, 136, 0.25);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.swipe-continue-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 28px;
+  border-radius: 14px;
+  background: #00FF88;
+  color: #050807;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 30px rgba(0, 255, 136, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.swipe-continue-btn:hover {
+  background: #33FFAA;
+  box-shadow: 0 10px 40px rgba(0, 255, 136, 0.75);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Adaptations
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .swipe-card {
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+  
+  .swipe-actions-strip {
+    gap: 12px;
+  }
+
+  .swipe-btn {
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+
+  .swipe-feedback-card {
+    padding: 24px 18px;
+  }
+}

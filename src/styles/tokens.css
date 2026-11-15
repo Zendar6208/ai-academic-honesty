@@ -1,0 +1,67 @@
+/* ==========================================================================
+   AI & ACADEMIC HONESTY — CYBERNETIC INTELLIGENCE ARCHIVE
+   Visual Identity: Matrix-Inspired Cyberpunk × Cinematic Digital Archive
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --bg-primary: #050807;
+  --bg-secondary: #071A10;
+  --bg-surface-elevated: #0C2417;
+  --bg-card: rgba(7, 26, 16, 0.75);
+  --bg-card-hover: rgba(12, 36, 23, 0.85);
+  --bg-translucent-glass: rgba(5, 8, 7, 0.82);
+
+  /* Accents & Phosphor Luminance */
+  --accent-primary: #00FF88;
+  --accent-secondary: #8AFFB2;
+  --accent-glow: rgba(0, 255, 136, 0.25);
+  --accent-glow-intense: rgba(0, 255, 136, 0.5);
+  --accent-tint: rgba(0, 255, 136, 0.08);
+  --accent-tint-subtle: rgba(0, 255, 136, 0.03);
+
+  /* Typography Colors */
+  --text-main: #E4F0E8;
+  --text-muted: #87968D;
+  --text-dim: #4E6055;
+  --text-document-contrast: #D9D2BD; /* Physical manuscript contrast */
+  --text-accent: #00FF88;
+
+  /* Architectural Grid & Borders */
+  --border-subtle: rgba(0, 255, 136, 0.12);
+  --border-medium: rgba(0, 255, 136, 0.24);
+  --border-strong: rgba(0, 255, 136, 0.45);
+  --border-active: #00FF88;
+
+  /* Typography Families */
+  --font-display: 'Space Grotesk', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Layout */
+  --container-max-width: 1480px;
+  --container-editorial-width: 1140px;
+  --container-text-measure: 68ch;
+  --header-height: 72px;
+
+  /* Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+  --space-4xl: 128px;
+
+  /* Cinematic & Hardware-Accelerated Motion Easings */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-terminal: cubic-bezier(0, 0, 0.2, 1);
+  
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-medium: 400ms;
+  --duration-cinematic: 900ms;
+}

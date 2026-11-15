@@ -1,0 +1,304 @@
+/* ==========================================================================
+   TYPOGRAPHY & CYBERPUNK ARCHIVE CRAFT FLOOR
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+body.matrix-archive-root {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* Restrained Scanline CRT Overlay (Subtle, non-intrusive) */
+body.matrix-archive-root::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  z-index: 999;
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+/* Atmospheric Ambient Vignette */
+body.matrix-archive-root::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, transparent 40%, rgba(5, 8, 7, 0.75) 100%);
+  pointer-events: none;
+  z-index: 998;
+}
+
+/* Custom Phosphor Selection */
+::selection {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+::-moz-selection {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+/* Archive Monospace Telemetry Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 136, 0.35);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Accessible Focus States */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-main);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+p {
+  color: var(--text-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  max-width: var(--container-text-measure);
+}
+
+/* Terminal Monospace Styling */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.terminal-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: var(--accent-tint);
+  border: 1px solid var(--border-subtle);
+}
+
+.terminal-badge::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background-color: var(--accent-primary);
+  box-shadow: 0 0 6px var(--accent-primary);
+}
+
+/* Physical Document Manuscript Callout */
+.manuscript-contrast {
+  color: var(--text-document-contrast);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* Ensure clean text wrapping and prevent clipping */
+h1, h2, h3, h4, h5, h6, p, span, a, label {
+  overflow-wrap: break-word;
+}
+
+/* Interactive Controls Baseline */
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
+  color: inherit;
+  transition: transform var(--duration-fast) var(--ease-snappy),
+              background-color var(--duration-fast) var(--ease-snappy),
+              border-color var(--duration-fast) var(--ease-snappy),
+              box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   UNIFIED BUTTON DESIGN SYSTEM ACROSS ALL EXHIBITS
+   ========================================================================== */
+
+/* Primary Action CTA (e.g. Next Exhibit, Start Challenge, Repair Workflow) */
+.exhibit-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 13px 28px;
+  background-color: var(--accent-primary);
+  color: #050807;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent-primary);
+  border-radius: 6px;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.35);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-snappy);
+}
+
+.exhibit-btn-primary:hover {
+  background-color: #8AFFB2;
+  border-color: #8AFFB2;
+  box-shadow: 0 0 28px rgba(0, 255, 136, 0.55);
+  transform: translateY(-1px);
+}
+
+.exhibit-btn-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Secondary Outlined Action */
+.exhibit-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 13px 24px;
+  background-color: rgba(7, 26, 16, 0.85);
+  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--border-medium);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-snappy);
+}
+
+.exhibit-btn-secondary:hover {
+  border-color: var(--accent-primary);
+  background-color: rgba(0, 255, 136, 0.12);
+  color: #FFFFFF;
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.2);
+}
+
+/* Section Connector / Scroll Pill */
+.exhibit-btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 24px;
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid var(--border-medium);
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  transition: all var(--duration-fast) var(--ease-snappy);
+}
+
+.exhibit-btn-pill:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 24px rgba(0, 255, 136, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Media Controls (PLAY / PAUSE / REPLAY) */
+.exhibit-control-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 14px;
+  background-color: rgba(7, 26, 16, 0.9);
+  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(0, 255, 136, 0.45);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.12);
+  transition: all var(--duration-fast) var(--ease-snappy);
+}
+
+.exhibit-control-btn:hover {
+  border-color: var(--accent-primary);
+  background-color: var(--accent-primary);
+  color: #050807;
+  box-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
+}
+
+.exhibit-control-btn-danger {
+  border-color: rgba(244, 63, 94, 0.5);
+  color: #FDA4AF;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.12);
+}
+
+.exhibit-control-btn-danger:hover {
+  border-color: #F43F5E;
+  background-color: #F43F5E;
+  color: #050807;
+  box-shadow: 0 0 18px rgba(244, 63, 94, 0.35);
+}
+
