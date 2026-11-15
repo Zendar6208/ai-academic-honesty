@@ -49,7 +49,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStartGame }) => 
               <span className="flex items-center gap-2">
                 <span className="text-[#00FF88]">●</span> 4 Interactive Exhibits
               </span>
-              <span className="text-[#00FF88] font-bold">Earn up to 600 PTS</span>
+              <span className="text-[#00FF88] font-bold">Earn up to 450 PTS</span>
             </div>
           </div>
         </div>

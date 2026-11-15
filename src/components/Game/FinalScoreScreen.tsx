@@ -25,26 +25,26 @@ interface FinalScoreScreenProps {
   onNavigateToExhibit?: (exhibitId: string) => void;
 }
 
-// Canonical display names for each exhibit as specified in requirements
+// Canonical display names for each exhibit
 const EXHIBIT_DISPLAY_NAMES: Record<string, { number: string; title: string }> = {
   'exhibit-01': { number: '01', title: 'AI Tutor vs AI Substitute' },
-  'exhibit-02': { number: '02', title: 'Citation Jigsaw' },
+  'exhibit-02': { number: '02', title: 'Citation Hallucination' },
   'exhibit-03': { number: '03', title: 'Ethical or Not?' },
   'exhibit-04': { number: '04', title: 'Repair the Workflow' },
 };
 
-// Strict performance title categories
+// Strict performance title categories for 450-point max scale
 export const getPerformanceDetails = (score: number) => {
-  if (score >= 540) {
+  if (score >= 405) {
     return {
       title: 'EXCEPTIONAL',
       color: '#00FF88',
       bgColor: 'rgba(0, 255, 136, 0.12)',
       description:
-        'You demonstrated rigorous cognitive independence and ethical discernment across all four inquiries, consistently choosing authentic comprehension and systematic verification over passive automation.',
+        'You demonstrated rigorous cognitive independence and ethical discernment across all inquiries, consistently choosing authentic comprehension and systematic verification over passive automation.',
     };
   }
-  if (score >= 480) {
+  if (score >= 360) {
     return {
       title: 'DISTINGUISHED',
       color: '#33FFAA',
@@ -53,7 +53,7 @@ export const getPerformanceDetails = (score: number) => {
         'You maintained strong academic discernment, understanding that responsible AI use requires active inquiry, fact-checking, and epistemic ownership of your research and writing.',
     };
   }
-  if (score >= 420) {
+  if (score >= 315) {
     return {
       title: 'PROFICIENT',
       color: '#8AFFB2',
@@ -62,7 +62,7 @@ export const getPerformanceDetails = (score: number) => {
         'You recognized key boundary lines between cognitive assistance and academic surrender, with solid critical questioning across the foundational dilemmas.',
     };
   }
-  if (score >= 360) {
+  if (score >= 270) {
     return {
       title: 'DEVELOPING',
       color: '#FBBF24',
@@ -82,7 +82,7 @@ export const getPerformanceDetails = (score: number) => {
 
 export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
   score: _liveScore,
-  maxScore = 600,
+  maxScore = 450,
   exhibits: _exhibits,
   results,
   completedExhibits = [],
@@ -91,27 +91,25 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
 }) => {
   // Accurate exhibit scores from results record
   const score01 = results['exhibit-01']?.pointsEarned ?? 0;
-  const score02 = results['exhibit-02']?.pointsEarned ?? 0;
   const score03 = results['exhibit-03']?.pointsEarned ?? 0;
   const score04 = results['exhibit-04']?.pointsEarned ?? 0;
 
-  // Strict sum of the 4 actual exhibit scores
-  const calculatedTotalScore = Math.min(score01 + score02 + score03 + score04, maxScore);
+  // Strict sum of the 3 scored exhibits (Exhibit 02 is educational, 0 pts)
+  const calculatedTotalScore = Math.min(score01 + score03 + score04, maxScore);
 
   // Check which exhibits are completed
   const isExhibit01Complete = completedExhibits.includes('exhibit-01');
-  const isExhibit02Complete = completedExhibits.includes('exhibit-02');
   const isExhibit03Complete = completedExhibits.includes('exhibit-03');
   const isExhibit04Complete = completedExhibits.includes('exhibit-04');
 
+  // The 3 scored activities required to unlock final results
   const completedCount = [
     isExhibit01Complete,
-    isExhibit02Complete,
     isExhibit03Complete,
     isExhibit04Complete,
   ].filter(Boolean).length;
 
-  const isAllComplete = completedCount === 4;
+  const isAllComplete = isExhibit01Complete && isExhibit03Complete && isExhibit04Complete;
 
   // Candidate Name state (Default: 'CANDIDATE', editable for print export)
   const [candidateName, setCandidateName] = useState<string>('CANDIDATE');
@@ -121,7 +119,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
   // Animated counting score
   const [displayedScore, setDisplayedScore] = useState<number>(0);
 
-  // Smooth count-up animation when all 4 exhibits are completed
+  // Smooth count-up animation when all required exhibits are completed
   useEffect(() => {
     if (!isAllComplete) {
       setDisplayedScore(0);
@@ -138,6 +136,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
       const progress = Math.min(elapsed / duration, 1);
+
       // Ease-out cubic
       const easedProgress = 1 - Math.pow(1 - progress, 3);
       const currentVal = Math.round(startVal + (target - startVal) * easedProgress);
@@ -155,7 +154,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
     return () => cancelAnimationFrame(frameId);
   }, [isAllComplete, calculatedTotalScore]);
 
-  // Overall percentage
+  // Overall percentage out of 450
   const percentage = Math.round((calculatedTotalScore / maxScore) * 1000) / 10;
   const performanceDetails = getPerformanceDetails(calculatedTotalScore);
 
@@ -184,7 +183,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
       {/* Ambient background glow */}
       <div className="final-ambient-glow" />
 
-      <div className="exhibition-container" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="exhibition-container" style={{ position: 'relative', zIndex: 1, maxWidth: '1140px', margin: '0 auto', width: '100%' }}>
         
         {/* Curatorial Header Stamp */}
         <div
@@ -232,27 +231,27 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
               fontWeight: 700,
             }}
           >
-            STATUS: {isAllComplete ? 'EVALUATION COMPLETE // 4 OF 4' : `PENDING // ${completedCount} OF 4 COMPLETED`}
+            STATUS: {isAllComplete ? 'EVALUATION COMPLETE // 3 OF 3 ASSESSMENTS' : `PENDING // ${completedCount} OF 3 ASSESSMENTS COMPLETED`}
           </div>
         </div>
 
         {/* =================================================================== */}
-        {/* CASE A: PENDING EVALUATION (When < 4 Exhibits are completed)         */}
+        {/* CASE A: PENDING EVALUATION (When not all 3 activities are complete) */}
         {/* =================================================================== */}
         {!isAllComplete && (
           <div className="evaluation-locked-container text-center animate-fadeIn">
             <span className="locked-header-badge">
               <Lock size={13} />
-              <span>CANDIDATE REPORT LOCKED // {completedCount} OF 4 COMPLETED</span>
+              <span>CANDIDATE REPORT LOCKED // {completedCount} OF 3 ASSESSMENTS COMPLETED</span>
             </span>
 
-            <h2 className="locked-title">COMPLETE ALL FOUR EXHIBITS</h2>
+            <h2 className="locked-title">COMPLETE ALL THREE ASSESSMENTS</h2>
 
             <p className="locked-description">
-              "The Candidate Performance Report synthesizes your discernment across all four inquiries. Complete every activity to reveal your final score, percentage, and performance title."
+              "The Candidate Performance Report synthesizes your discernment across all four inquiries. Complete every interactive assessment to reveal your official final score (out of 450 PTS), percentage, and performance title."
             </p>
 
-            {/* Checklist of 4 Exhibits */}
+            {/* Checklist of Exhibits */}
             <div className="locked-checklist-grid">
               {[
                 {
@@ -261,13 +260,15 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                   name: 'AI Tutor vs AI Substitute',
                   isDone: isExhibit01Complete,
                   pts: score01,
+                  isScored: true,
                 },
                 {
                   id: 'exhibit-02',
                   num: '02',
-                  name: 'Citation Jigsaw',
-                  isDone: isExhibit02Complete,
-                  pts: score02,
+                  name: 'Citation Hallucination',
+                  isDone: true, // Exhibit 02 is educational, never blocks unlocking
+                  pts: 0,
+                  isScored: false,
                 },
                 {
                   id: 'exhibit-03',
@@ -275,6 +276,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                   name: 'Ethical or Not?',
                   isDone: isExhibit03Complete,
                   pts: score03,
+                  isScored: true,
                 },
                 {
                   id: 'exhibit-04',
@@ -282,6 +284,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                   name: 'Repair the Workflow',
                   isDone: isExhibit04Complete,
                   pts: score04,
+                  isScored: true,
                 },
               ].map((item) => (
                 <div
@@ -298,7 +301,11 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                           item.isDone ? 'text-[#00FF88]' : 'text-[#FBBF24]'
                         }`}
                       >
-                        {item.isDone ? `✓ ${item.pts}/150 PTS` : '⚠ PENDING'}
+                        {!item.isScored
+                          ? '✓ EDUCATIONAL'
+                          : item.isDone
+                          ? `✓ ${item.pts}/150 PTS`
+                          : '⚠ PENDING'}
                       </span>
                     </div>
                     <h4 className="locked-card-title">{item.name}</h4>
@@ -317,7 +324,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                   {item.isDone && (
                     <div className="flex items-center gap-1.5 text-xs text-[#00FF88] font-mono font-bold">
                       <CheckCircle2 size={14} />
-                      <span>ACTIVITY COMPLETED</span>
+                      <span>{item.isScored ? 'ACTIVITY COMPLETED' : 'EDUCATIONAL // VERIFIED'}</span>
                     </div>
                   )}
                 </div>
@@ -325,13 +332,13 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
             </div>
 
             <div className="font-mono text-xs text-[#87968D]">
-              [ INVESTIGATE REMAINING EXHIBITS ABOVE TO UNLOCK OFFICIAL RESULTS ]
+              [ COMPLETE REMAINING ASSESSMENTS ABOVE TO UNLOCK OFFICIAL RESULTS ]
             </div>
           </div>
         )}
 
         {/* =================================================================== */}
-        {/* CASE B: COMPLETE FINAL RESULTS (All 4 Exhibits completed)           */}
+        {/* CASE B: COMPLETE FINAL RESULTS (All 3 Assessments Completed)        */}
         {/* =================================================================== */}
         {isAllComplete && (
           <div className="animate-fadeIn">
@@ -340,7 +347,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
             <div className="completion-hero-banner">
               <span className="completion-kicker">
                 <Sparkles size={12} className="inline mr-1" />
-                EXHIBITION COMPLETE // ALL 4 INQUIRIES CONCLUDED
+                EXHIBITION COMPLETE // ALL INQUIRIES CONCLUDED
               </span>
               
               <h1 className="completion-hero-title">
@@ -348,7 +355,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
               </h1>
 
               <p className="completion-hero-subtext">
-                "Four challenges. Four opportunities to think critically. One final result."
+                "Four inquiries. Three rigorous assessments. One definitive record of academic ownership."
               </p>
             </div>
 
@@ -471,7 +478,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                       PERCENTAGE: {percentage}%
                     </span>
                     <span className="score-meta-pill">
-                      COMPLETED: 4 / 4 EXHIBITS
+                      ASSESSMENTS: 3 / 3 COMPLETED
                     </span>
                     <span className="score-meta-pill text-[#00FF88] border-[#00FF88]/40">
                       STATUS: COMPLETED
@@ -495,14 +502,14 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                 </div>
                 <p className="performance-tier-desc">{performanceDetails.description}</p>
                 <p className="performance-tier-disclaimer">
-                  * Performance categories reflect exhibition simulation metrics and are not official university grades.
+                  * Performance categories reflect exhibition simulation metrics on a 450-point scale and are not official university grades.
                 </p>
               </div>
 
               {/* 3. EXHIBIT-WISE SCORE BREAKDOWN */}
               <div className="breakdown-section-title">
                 <span>EXHIBIT-WISE PERFORMANCE BREAKDOWN</span>
-                <span className="text-[11px] text-[#87968D]">4 / 4 CHALLENGES VERIFIED</span>
+                <span className="text-[11px] text-[#87968D]">4 INQUIRIES // 3 ASSESSMENTS</span>
               </div>
 
               <div className="exhibit-breakdown-grid">
@@ -513,13 +520,15 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                     title: EXHIBIT_DISPLAY_NAMES['exhibit-01'].title,
                     score: score01,
                     max: 150,
+                    isScored: true,
                   },
                   {
                     id: 'exhibit-02',
                     num: EXHIBIT_DISPLAY_NAMES['exhibit-02'].number,
                     title: EXHIBIT_DISPLAY_NAMES['exhibit-02'].title,
-                    score: score02,
-                    max: 150,
+                    score: 0,
+                    max: 0,
+                    isScored: false,
                   },
                   {
                     id: 'exhibit-03',
@@ -527,6 +536,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                     title: EXHIBIT_DISPLAY_NAMES['exhibit-03'].title,
                     score: score03,
                     max: 150,
+                    isScored: true,
                   },
                   {
                     id: 'exhibit-04',
@@ -534,9 +544,12 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                     title: EXHIBIT_DISPLAY_NAMES['exhibit-04'].title,
                     score: score04,
                     max: 150,
+                    isScored: true,
                   },
                 ].map((item) => {
-                  const itemPercent = Math.round((item.score / item.max) * 100);
+                  const itemPercent = item.isScored
+                    ? Math.round((item.score / item.max) * 100)
+                    : 100;
                   return (
                     <div key={item.id} className="breakdown-card">
                       <div className="breakdown-card-top">
@@ -547,8 +560,16 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                           <h4 className="breakdown-exhibit-name">{item.title}</h4>
                         </div>
                         <div className="breakdown-score-badge">
-                          <span className="breakdown-score-value">{item.score}</span>
-                          <span className="breakdown-score-max"> / {item.max}</span>
+                          {item.isScored ? (
+                            <>
+                              <span className="breakdown-score-value">{item.score}</span>
+                              <span className="breakdown-score-max"> / {item.max}</span>
+                            </>
+                          ) : (
+                            <span className="font-mono text-xs text-[#00FF88] font-bold">
+                              EDUCATIONAL
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -562,10 +583,14 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                         </div>
                         <div className="flex justify-between items-center mt-1.5">
                           <span className="font-mono text-[10px] text-[#87968D]">
-                            {item.score > 0 ? '✓ COMPLETED' : 'PARTICIPATED'}
+                            {item.isScored
+                              ? item.score > 0
+                                ? '✓ COMPLETED'
+                                : 'PARTICIPATED'
+                              : '✓ VERIFIED'}
                           </span>
                           <span className="font-mono text-[10px] text-[#00FF88] font-bold">
-                            {itemPercent}%
+                            {item.isScored ? `${itemPercent}%` : 'INQUIRY COMPLETED'}
                           </span>
                         </div>
                       </div>
@@ -600,7 +625,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="btn-print-export"
+                  className="btn-print-export cursor-pointer"
                   title="Print or export candidate performance report as PDF"
                 >
                   <Printer size={16} />
@@ -611,7 +636,7 @@ export const FinalScoreScreen: React.FC<FinalScoreScreenProps> = ({
                 <button
                   type="button"
                   onClick={onRestart}
-                  className="btn-new-visitor"
+                  className="btn-new-visitor cursor-pointer"
                   title="Reset exhibition and start fresh"
                 >
                   <RotateCcw size={16} />

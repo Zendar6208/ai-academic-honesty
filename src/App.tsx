@@ -81,10 +81,10 @@ export function App() {
             ...newSession,
           }));
         },
-        completeAllExhibits: (scores: [number, number, number, number] = [125, 110, 132, 120]) => {
+        completeAllExhibits: (scores: [number, number, number, number] = [150, 0, 150, 150]) => {
           setPreludeStage('exhibition');
           setHasEntered(true);
-          const total = scores[0] + scores[1] + scores[2] + scores[3];
+          const total = Math.min(scores[0] + scores[1] + scores[2] + scores[3], 450);
           setSession({
             step: 'exhibit-04',
             score: total,
@@ -96,27 +96,31 @@ export function App() {
             },
             results: {
               'exhibit-01': { isCorrect: scores[0] >= 90, pointsEarned: scores[0] },
-              'exhibit-02': { isCorrect: scores[1] >= 90, pointsEarned: scores[1] },
+              'exhibit-02': { isCorrect: true, pointsEarned: 0 },
               'exhibit-03': { isCorrect: scores[2] >= 90, pointsEarned: scores[2] },
               'exhibit-04': { isCorrect: scores[3] >= 90, pointsEarned: scores[3] },
             },
             completedExhibits: ['exhibit-01', 'exhibit-02', 'exhibit-03', 'exhibit-04'],
           });
         },
-        completeSingleExhibit: (exId: ExhibitId, score: number = 125) => {
+        completeSingleExhibit: (exId: ExhibitId, score: number = 150) => {
           setPreludeStage('exhibition');
           setHasEntered(true);
           setSession((prev) => {
+            const points = exId === 'exhibit-02' ? 0 : score;
             const updatedResults = {
               ...prev.results,
-              [exId]: { isCorrect: score >= 90, pointsEarned: score },
+              [exId]: { isCorrect: points >= 90 || exId === 'exhibit-02', pointsEarned: points },
             };
             const updatedCompleted: ExhibitId[] = prev.completedExhibits.includes(exId)
               ? prev.completedExhibits
               : [...prev.completedExhibits, exId];
             return {
               ...prev,
-              score: Object.values(updatedResults).reduce((sum, r) => sum + (r?.pointsEarned || 0), 0),
+              score: Math.min(
+                Object.values(updatedResults).reduce((sum, r) => sum + (r?.pointsEarned || 0), 0),
+                450
+              ),
               results: updatedResults,
               completedExhibits: updatedCompleted,
             };
@@ -156,7 +160,7 @@ export function App() {
   const handleExhibit01ScoreUpdate = (pointsAdded: number) => {
     setSession((prev) => ({
       ...prev,
-      score: Math.min(prev.score + pointsAdded, 600),
+      score: Math.min(prev.score + pointsAdded, 450),
     }));
   };
 
@@ -180,7 +184,11 @@ export function App() {
         0
       );
 
-      if (updatedCompleted.length === 4 && !alreadyCompleted) {
+      const areAllScoredComplete = ['exhibit-01', 'exhibit-03', 'exhibit-04'].every((id) =>
+        updatedCompleted.includes(id as ExhibitId)
+      );
+
+      if (areAllScoredComplete && !alreadyCompleted) {
         setTimeout(() => {
           const elem = document.getElementById('final-evaluation');
           if (elem) elem.scrollIntoView({ behavior: 'smooth' });
@@ -189,7 +197,7 @@ export function App() {
 
       return {
         ...prev,
-        score: Math.min(totalScore, 600),
+        score: Math.min(totalScore, 450),
         answers: {
           ...prev.answers,
           'exhibit-01': `completed_${totalCorrect}_of_10`,
@@ -200,23 +208,20 @@ export function App() {
     });
   };
 
-  // Exhibit 02 real-time score updates (+30 or +60 PTS)
-  const handleExhibit02ScoreUpdate = (pointsAdded: number) => {
-    setSession((prev) => ({
-      ...prev,
-      score: Math.min(prev.score + pointsAdded, 600),
-    }));
+  // Exhibit 02 real-time score updates (Exhibit 02 is educational, 0 PTS)
+  const handleExhibit02ScoreUpdate = (_pointsAdded: number) => {
+    // No points awarded for Exhibit 02
   };
 
-  // Exhibit 02 completion
-  const handleExhibit02Complete = (finalScore: number, isVerdictCorrect: boolean) => {
+  // Exhibit 02 completion (Educational only, 0 PTS)
+  const handleExhibit02Complete = () => {
     setSession((prev) => {
       const alreadyCompleted = prev.completedExhibits.includes('exhibit-02');
       const updatedResults = {
         ...prev.results,
         'exhibit-02': {
-          isCorrect: isVerdictCorrect,
-          pointsEarned: finalScore,
+          isCorrect: true,
+          pointsEarned: 0,
         },
       };
       const updatedCompleted: ExhibitId[] = alreadyCompleted
@@ -228,19 +233,12 @@ export function App() {
         0
       );
 
-      if (updatedCompleted.length === 4 && !alreadyCompleted) {
-        setTimeout(() => {
-          const elem = document.getElementById('final-evaluation');
-          if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-        }, 500);
-      }
-
       return {
         ...prev,
-        score: Math.min(totalScore, 600),
+        score: Math.min(totalScore, 450),
         answers: {
           ...prev.answers,
-          'exhibit-02': `jigsaw_score_${finalScore}`,
+          'exhibit-02': 'educational_concluded',
         },
         results: updatedResults,
         completedExhibits: updatedCompleted,
@@ -252,7 +250,7 @@ export function App() {
   const handleExhibit03ScoreUpdate = (pointsAdded: number) => {
     setSession((prev) => ({
       ...prev,
-      score: Math.min(prev.score + pointsAdded, 600),
+      score: Math.min(prev.score + pointsAdded, 450),
     }));
   };
 
@@ -276,7 +274,11 @@ export function App() {
         0
       );
 
-      if (updatedCompleted.length === 4 && !alreadyCompleted) {
+      const areAllScoredComplete = ['exhibit-01', 'exhibit-03', 'exhibit-04'].every((id) =>
+        updatedCompleted.includes(id as ExhibitId)
+      );
+
+      if (areAllScoredComplete && !alreadyCompleted) {
         setTimeout(() => {
           const elem = document.getElementById('final-evaluation');
           if (elem) elem.scrollIntoView({ behavior: 'smooth' });
@@ -285,7 +287,7 @@ export function App() {
 
       return {
         ...prev,
-        score: Math.min(totalScore, 600),
+        score: Math.min(totalScore, 450),
         answers: {
           ...prev.answers,
           'exhibit-03': `swipe_score_${finalScore}`,
@@ -300,7 +302,7 @@ export function App() {
   const handleExhibit04ScoreUpdate = (pointsAdded: number) => {
     setSession((prev) => ({
       ...prev,
-      score: Math.min(prev.score + pointsAdded, 600),
+      score: Math.min(prev.score + pointsAdded, 450),
     }));
   };
 
@@ -324,7 +326,11 @@ export function App() {
         0
       );
 
-      if (updatedCompleted.length === 4 && !alreadyCompleted) {
+      const areAllScoredComplete = ['exhibit-01', 'exhibit-03', 'exhibit-04'].every((id) =>
+        updatedCompleted.includes(id as ExhibitId)
+      );
+
+      if (areAllScoredComplete && !alreadyCompleted) {
         setTimeout(() => {
           const elem = document.getElementById('final-evaluation');
           if (elem) elem.scrollIntoView({ behavior: 'smooth' });
@@ -333,7 +339,7 @@ export function App() {
 
       return {
         ...prev,
-        score: Math.min(totalScore, 600),
+        score: Math.min(totalScore, 450),
         answers: {
           ...prev.answers,
           'exhibit-04': `workflow_repaired_${finalScore}`,
@@ -363,7 +369,7 @@ export function App() {
     const totalPointsEarned = basePoints + bonusPoints;
 
     setSession((prev) => {
-      const newScore = Math.min(prev.score + totalPointsEarned, 600);
+      const newScore = Math.min(prev.score + totalPointsEarned, 450);
 
       return {
         ...prev,
@@ -542,7 +548,7 @@ export function App() {
             {/* Final Evaluation & Score Showcase */}
             <FinalScoreScreen
               score={session.score}
-              maxScore={600}
+              maxScore={450}
               exhibits={EXHIBITS}
               results={session.results}
               completedExhibits={session.completedExhibits}

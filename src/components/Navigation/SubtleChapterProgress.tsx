@@ -134,7 +134,7 @@ export const SubtleChapterProgress: React.FC<SubtleChapterProgressProps> = ({
           >
             <span style={{ color: 'var(--accent-primary)' }}>★</span>
             <span style={{ color: 'var(--accent-primary)' }}>{score}</span>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.6875rem' }}>/ 600 PTS</span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.6875rem' }}>/ 450 PTS</span>
           </div>
 
           {/* New Visitor / Reset Button */}

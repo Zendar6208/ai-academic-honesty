@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw, Sparkles } from 'lucide-react';
 
 interface Exhibit02MotionGraphicProps {
   onStageChange?: (stage: number) => void;
@@ -18,6 +18,14 @@ export const Exhibit02MotionGraphic: React.FC<Exhibit02MotionGraphicProps> = ({
 
   const TOTAL_STEPS = 5;
   const STEP_DURATION_MS = 3800; // 3.8s per scene
+
+  const stageTitles = [
+    { num: 1, label: 'THE REQUEST', desc: 'Student prompts AI for papers' },
+    { num: 2, label: 'THE FABRICATION', desc: 'AI synthesizes plausible citation' },
+    { num: 3, label: 'THE ILLUSION', desc: 'Pasted into bibliography without verification' },
+    { num: 4, label: 'THE CROSS-CHECK', desc: 'Registry query reveals conflicting records' },
+    { num: 5, label: 'FORENSIC VERDICT', desc: 'Reference not verified: looking real != real' },
+  ];
 
   // IntersectionObserver to auto-play when >= 70% visible
   useEffect(() => {
@@ -126,11 +134,11 @@ export const Exhibit02MotionGraphic: React.FC<Exhibit02MotionGraphicProps> = ({
   return (
     <div
       ref={containerRef}
-      className="w-full bg-[#050807] border-2 border-[#00FF88]/30 rounded-2xl p-6 sm:p-8 mb-10 shadow-[0_20px_50px_rgba(0,0,0,0.85)] relative overflow-hidden"
+      className="w-full bg-[#050807] border-2 border-[#00FF88]/30 rounded-2xl p-5 sm:p-8 mb-10 shadow-[0_24px_60px_rgba(0,0,0,0.85)] relative overflow-hidden"
     >
       {/* Background Matrix Ambient Grid */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        className="absolute inset-0 pointer-events-none opacity-[0.035]"
         style={{
           backgroundImage: 'radial-gradient(circle at 1px 1px, #00FF88 1px, transparent 0)',
           backgroundSize: '24px 24px',
@@ -138,40 +146,20 @@ export const Exhibit02MotionGraphic: React.FC<Exhibit02MotionGraphicProps> = ({
       />
 
       {/* =================================================================== */}
-      {/* 1. CINEMA HEADER BAR (Clean, Elegant, Matching Exhibit 01)          */}
+      {/* 1. CINEMA HEADER BAR                                                */}
       {/* =================================================================== */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-6 border-b border-white/10 relative z-10">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b border-white/10 relative z-10">
         
         {/* Left: Clean Header Title */}
         <div className="flex items-center gap-2.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#00FF88] flex-shrink-0" />
-          <span className="font-display font-bold text-sm sm:text-base text-[#E4F0E8]">
-            The Anatomy of a Fake Citation // Five-Stage Breakdown
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#00FF88] flex-shrink-0" />
+          <span className="font-display font-bold text-sm sm:text-base text-[#E4F0E8] tracking-wide">
+            THE ANATOMY OF A FAKE CITATION // 5-STAGE INVESTIGATION
           </span>
         </div>
 
-        {/* Right: Controls (5 Subtle Stage Dots + PAUSE and REPLAY) */}
+        {/* Right: Controls (PAUSE and REPLAY) */}
         <div className="flex items-center gap-2">
-          {/* Subtle Stage Dots */}
-          <div className="hidden xs:flex items-center gap-1.5 mr-1" aria-label={`Stage ${currentStep} of 5`}>
-            {[1, 2, 3, 4, 5].map((dot) => (
-              <button
-                key={dot}
-                type="button"
-                onClick={() => handleStepClick(dot)}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  dot === currentStep
-                    ? 'w-5 bg-[#00FF88] shadow-[0_0_8px_#00FF88]'
-                    : dot < currentStep
-                    ? 'w-2 bg-[#00FF88]/40 hover:bg-[#00FF88]/70'
-                    : 'w-2 bg-white/15 hover:bg-white/30'
-                }`}
-                title={`Scene ${dot}`}
-                aria-label={`Jump to Scene ${dot}`}
-              />
-            ))}
-          </div>
-
           {/* PAUSE / PLAY Button */}
           <button
             onClick={togglePlay}
@@ -208,9 +196,47 @@ export const Exhibit02MotionGraphic: React.FC<Exhibit02MotionGraphicProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* 2. CINEMATIC ILLUSTRATED ANIMATION STAGE (Large Dominant Canvas)    */}
+      {/* 2. INTERACTIVE 5-STAGE TIMELINE TRACKER                             */}
       {/* =================================================================== */}
-      <div className="w-full bg-[#070D09] border border-[#00FF88]/20 rounded-xl p-4 sm:p-6 min-h-[360px] sm:min-h-[420px] flex flex-col justify-center items-center relative overflow-hidden">
+      <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-5 gap-2 mb-6 relative z-10">
+        {stageTitles.map((stage) => {
+          const isActive = currentStep === stage.num;
+          const isPast = currentStep > stage.num;
+
+          return (
+            <button
+              key={stage.num}
+              type="button"
+              onClick={() => handleStepClick(stage.num)}
+              className={`py-2 px-2.5 rounded-lg border text-left transition-all cursor-pointer relative overflow-hidden ${
+                isActive
+                  ? 'bg-[#091F13] border-[#00FF88] shadow-[0_0_14px_rgba(0,255,136,0.3)]'
+                  : isPast
+                  ? 'bg-[#06110B] border-[#00FF88]/30 hover:border-[#00FF88]/60'
+                  : 'bg-[#050807] border-white/10 opacity-50 hover:opacity-80'
+              }`}
+            >
+              {isActive && (
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#00FF88] shadow-[0_0_8px_#00FF88]" />
+              )}
+              <div className="flex items-center justify-between mb-0.5">
+                <span className={`font-mono text-[10px] font-bold ${isActive ? 'text-[#00FF88]' : 'text-[#87968D]'}`}>
+                  0{stage.num}
+                </span>
+                {isActive && <Sparkles size={10} className="text-[#00FF88] animate-pulse" />}
+              </div>
+              <div className="font-display font-bold text-[11px] sm:text-xs text-[#E4F0E8] truncate">
+                {stage.label}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* =================================================================== */}
+      {/* 3. CINEMATIC ILLUSTRATED ANIMATION STAGE (Enlarged Dominant Canvas)  */}
+      {/* =================================================================== */}
+      <div className="w-full bg-[#070D09] border border-[#00FF88]/25 rounded-xl p-5 sm:p-8 min-h-[440px] sm:min-h-[500px] flex flex-col justify-center items-center relative overflow-hidden">
         
         {/* Subtle Ambient Radial Lighting */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#00FF88]/5 rounded-full blur-3xl pointer-events-none" />
@@ -220,291 +246,290 @@ export const Exhibit02MotionGraphic: React.FC<Exhibit02MotionGraphicProps> = ({
         {/* ----------------------------------------------------------------- */}
         {currentStep === 1 && (
           <div className="w-full flex flex-col items-center animate-fadeIn text-center">
-            <svg viewBox="0 0 460 210" className="w-full max-w-[460px] h-56 sm:h-64 mb-2">
+            <svg viewBox="0 0 540 240" className="w-full max-w-[680px] sm:max-w-[740px] h-64 sm:h-72 md:h-80 mb-3">
               {/* Desk Surface */}
-              <rect x="20" y="160" width="420" height="12" rx="3" fill="#15201A" stroke="#2A3D32" strokeWidth="1.5" />
-              <rect x="45" y="172" width="14" height="38" fill="#0C1410" />
-              <rect x="400" y="172" width="14" height="38" fill="#0C1410" />
+              <rect x="20" y="185" width="500" height="14" rx="3" fill="#15201A" stroke="#2A3D32" strokeWidth="1.5" />
+              <rect x="50" y="199" width="16" height="38" fill="#0C1410" />
+              <rect x="474" y="199" width="16" height="38" fill="#0C1410" />
 
               {/* Research Assignment Sheet on desk */}
-              <rect x="60" y="125" width="60" height="36" rx="2" fill="#0D1611" stroke="#3A5243" strokeWidth="1" />
-              <line x1="68" y1="133" x2="112" y2="133" stroke="#00FF88" strokeWidth="2" />
-              <line x1="68" y1="140" x2="105" y2="140" stroke="#4D6B58" strokeWidth="1.5" />
-              <line x1="68" y1="147" x2="98" y2="147" stroke="#4D6B58" strokeWidth="1.5" />
-              <text x="90" y="156" fill="#87968D" fontSize="5" fontFamily="monospace" textAnchor="middle">ASSIGNMENT</text>
+              <rect x="65" y="145" width="70" height="40" rx="3" fill="#0D1611" stroke="#3A5243" strokeWidth="1.2" />
+              <line x1="75" y1="154" x2="125" y2="154" stroke="#00FF88" strokeWidth="2.5" />
+              <line x1="75" y1="162" x2="118" y2="162" stroke="#4D6B58" strokeWidth="1.5" />
+              <line x1="75" y1="170" x2="110" y2="170" stroke="#4D6B58" strokeWidth="1.5" />
+              <text x="100" y="180" fill="#87968D" fontSize="6" fontFamily="monospace" textAnchor="middle">ASSIGNMENT SPECS</text>
 
               {/* Student Figure */}
-              <circle cx="340" cy="90" r="22" fill="#E4F0E8" />
+              <circle cx="410" cy="100" r="26" fill="#E4F0E8" />
               {/* Glasses */}
-              <rect x="325" y="85" width="12" height="6" rx="2" fill="none" stroke="#050807" strokeWidth="1.5" />
-              <rect x="341" y="85" width="12" height="6" rx="2" fill="none" stroke="#050807" strokeWidth="1.5" />
-              <line x1="337" y1="88" x2="341" y2="88" stroke="#050807" strokeWidth="1.5" />
+              <rect x="392" y="94" width="15" height="8" rx="2" fill="none" stroke="#050807" strokeWidth="1.8" />
+              <rect x="412" y="94" width="15" height="8" rx="2" fill="none" stroke="#050807" strokeWidth="1.8" />
+              <line x1="407" y1="98" x2="412" y2="98" stroke="#050807" strokeWidth="1.8" />
 
-              {/* Student Torso leaning forward */}
-              <path d="M 315 120 Q 340 115 365 120 L 380 165 L 305 165 Z" fill="#2E4035" stroke="#3D5446" strokeWidth="1.5" />
-              <path d="M 310 130 L 265 153 L 245 157" fill="none" stroke="#2E4035" strokeWidth="10" strokeLinecap="round" />
+              {/* Student Torso */}
+              <path d="M 380 135 Q 410 130 440 135 L 458 185 L 368 185 Z" fill="#2E4035" stroke="#3D5446" strokeWidth="1.8" />
+              <path d="M 374 146 L 315 174 L 290 179" fill="none" stroke="#2E4035" strokeWidth="12" strokeLinecap="round" />
 
               {/* Laptop Base */}
-              <polygon points="150,160 260,160 250,167 160,167" fill="#1C2B22" stroke="#00FF88" strokeWidth="1" />
+              <polygon points="175,185 305,185 293,194 187,194" fill="#1C2B22" stroke="#00FF88" strokeWidth="1.2" />
               {/* Laptop Screen (angled open) */}
-              <polygon points="155,80 255,80 260,160 150,160" fill="#050B08" stroke="#00FF88" strokeWidth="1.5" />
+              <polygon points="180,90 300,90 305,185 175,185" fill="#050B08" stroke="#00FF88" strokeWidth="1.8" />
 
               {/* Screen Content: AI Chat Interface */}
-              <rect x="160" y="85" width="90" height="12" rx="1" fill="#0A1810" />
-              <circle cx="166" cy="91" r="2" fill="#00FF88" />
-              <text x="172" y="93" fill="#00FF88" fontSize="4.5" fontFamily="monospace">RESEARCH_AI</text>
+              <rect x="186" y="96" width="108" height="15" rx="2" fill="#0A1810" />
+              <circle cx="194" cy="103" r="2.5" fill="#00FF88" />
+              <text x="202" y="106" fill="#00FF88" fontSize="5.5" fontFamily="monospace" fontWeight="bold">SYNTHESIS_MODEL_v4</text>
 
               {/* Chat Prompt Stream Bubble with Animated Typing */}
-              <rect x="160" y="101" width="88" height="28" rx="2" fill="#0C1D13" stroke="#00FF88" strokeWidth="0.8" />
-              <text x="164" y="110" fill="#87968D" fontSize="4" fontFamily="monospace">PROMPT:</text>
-              <text x="164" y="117" fill="#FFFFFF" fontSize="4.5" fontWeight="bold" fontFamily="monospace">"Suggest academic papers</text>
-              <text x="164" y="124" fill="#00FF88" fontSize="4.5" fontWeight="bold" fontFamily="monospace">on adaptive graph pruning"</text>
-              {/* Blinking cursor */}
-              <rect x="241" y="120" width="2" height="5" fill="#00FF88" className="animate-pulse" />
+              <rect x="186" y="115" width="106" height="34" rx="2" fill="#0C1D13" stroke="#00FF88" strokeWidth="1" />
+              <text x="191" y="125" fill="#87968D" fontSize="4.5" fontFamily="monospace">PROMPT:</text>
+              <text x="191" y="133" fill="#FFFFFF" fontSize="5" fontWeight="bold" fontFamily="monospace">"Find 3 scholarly papers</text>
+              <text x="191" y="141" fill="#00FF88" fontSize="5" fontWeight="bold" fontFamily="monospace">on adaptive graph pruning"</text>
+              <rect x="281" y="137" width="2.5" height="6" fill="#00FF88" className="animate-pulse" />
 
               {/* AI Processing Status */}
-              <rect x="160" y="133" width="70" height="18" rx="2" fill="#050E09" stroke="#00FF88" strokeWidth="0.6" strokeDasharray="2 1" />
-              <circle cx="166" cy="142" r="2" fill="#00FF88" className="animate-ping" />
-              <text x="172" y="144" fill="#00FF88" fontSize="4" fontFamily="monospace">SYNTHESIZING CITATIONS...</text>
+              <rect x="186" y="153" width="90" height="22" rx="2" fill="#050E09" stroke="#00FF88" strokeWidth="0.8" strokeDasharray="3 1.5" />
+              <circle cx="194" cy="164" r="2.5" fill="#00FF88" className="animate-ping" />
+              <text x="202" y="167" fill="#00FF88" fontSize="5" fontFamily="monospace">ASSEMBLING TOKENS...</text>
 
               {/* Animated Floating Query Beam */}
-              <path d="M 205 80 Q 205 40 280 35" fill="none" stroke="#00FF88" strokeWidth="1.5" strokeDasharray="3 2" />
-              <circle cx="280" cy="35" r="18" fill="#0A1810" stroke="#00FF88" strokeWidth="1" />
-              <text x="280" y="33" fill="#87968D" fontSize="4" fontFamily="monospace" textAnchor="middle">FIND</text>
-              <text x="280" y="39" fill="#00FF88" fontSize="5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">SOURCES</text>
+              <path d="M 240 90 Q 240 40 330 35" fill="none" stroke="#00FF88" strokeWidth="2" strokeDasharray="4 2" />
+              <circle cx="330" cy="35" r="22" fill="#0A1810" stroke="#00FF88" strokeWidth="1.5" />
+              <text x="330" y="32" fill="#87968D" fontSize="4.5" fontFamily="monospace" textAnchor="middle">QUERY</text>
+              <text x="330" y="40" fill="#00FF88" fontSize="6.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">CITATIONS</text>
             </svg>
 
-            <p className="font-body text-sm sm:text-base text-[#D1DDD5] max-w-lg mx-auto">
-              A university student prompts an AI assistant to locate academic research papers for an assignment.
+            <p className="font-body text-base sm:text-lg text-[#E4F0E8] max-w-xl mx-auto font-medium">
+              A university student prompts an AI model to retrieve scholarly research papers for an academic assignment.
             </p>
           </div>
         )}
 
         {/* ----------------------------------------------------------------- */}
-        {/* SCENE 02 — THE CITATION APPEARS (Scholarly Paper Materializes)    */}
+        {/* SCENE 02 — THE FABRICATION (Scholarly Paper Materializes)          */}
         {/* ----------------------------------------------------------------- */}
         {currentStep === 2 && (
           <div className="w-full flex flex-col items-center animate-fadeIn text-center">
-            <svg viewBox="0 0 460 210" className="w-full max-w-[460px] h-56 sm:h-64 mb-2">
+            <svg viewBox="0 0 540 240" className="w-full max-w-[680px] sm:max-w-[740px] h-64 sm:h-72 md:h-80 mb-3">
               {/* Paper Background & Sheet */}
-              <rect x="75" y="10" width="310" height="190" rx="4" fill="#0A120D" stroke="#00FF88" strokeWidth="2" filter="drop-shadow(0 15px 25px rgba(0,255,136,0.15))" />
+              <rect x="90" y="12" width="360" height="216" rx="5" fill="#0A120D" stroke="#00FF88" strokeWidth="2.2" filter="drop-shadow(0 18px 30px rgba(0,255,136,0.18))" />
               
               {/* Journal Masthead */}
-              <rect x="76" y="11" width="308" height="26" rx="3" fill="#0F1F16" />
-              <circle cx="95" cy="24" r="6" fill="#00FF88" fillOpacity="0.2" stroke="#00FF88" strokeWidth="1" />
-              <text x="95" y="27" fill="#00FF88" fontSize="6" fontWeight="bold" textAnchor="middle" fontFamily="serif">IJ</text>
-              <text x="110" y="22" fill="#E4F0E8" fontSize="6.5" fontWeight="bold" fontFamily="serif">INTERNATIONAL JOURNAL OF NEURAL SYNTHETICS</text>
-              <text x="110" y="31" fill="#87968D" fontSize="5" fontFamily="monospace">VOL. 14, NO. 3 • PEER-REVIEWED RESEARCH</text>
+              <rect x="91" y="13" width="358" height="32" rx="4" fill="#0F1F16" />
+              <circle cx="114" cy="29" r="8" fill="#00FF88" fillOpacity="0.2" stroke="#00FF88" strokeWidth="1.2" />
+              <text x="114" y="33" fill="#00FF88" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="serif">IJ</text>
+              <text x="132" y="27" fill="#E4F0E8" fontSize="8" fontWeight="bold" fontFamily="serif">INTERNATIONAL JOURNAL OF NEURAL SYNTHETICS</text>
+              <text x="132" y="38" fill="#87968D" fontSize="6" fontFamily="monospace">VOL. 14, NO. 3 • PEER-REVIEWED RESEARCH</text>
 
               {/* Research Article Title */}
-              <text x="95" y="53" fill="#FFFFFF" fontSize="10.5" fontWeight="bold" fontFamily="serif">
+              <text x="114" y="66" fill="#FFFFFF" fontSize="12" fontWeight="bold" fontFamily="serif">
                 Adaptive Graph Pruning for Latent Knowledge Graphs
               </text>
 
               {/* Authors Byline */}
-              <text x="95" y="69" fill="#00FF88" fontSize="7" fontWeight="bold" fontFamily="sans-serif">
+              <text x="114" y="85" fill="#00FF88" fontSize="8.5" fontWeight="bold" fontFamily="sans-serif">
                 E. R. Vance &amp; K. Rostova
               </text>
-              <text x="95" y="78" fill="#87968D" fontSize="5" fontFamily="sans-serif">
+              <text x="114" y="96" fill="#87968D" fontSize="6" fontFamily="sans-serif">
                 Department of Machine Intelligence &amp; Theoretical Computer Science
               </text>
 
               {/* Metadata Badges */}
-              <rect x="95" y="87" width="70" height="14" rx="2" fill="#13241B" stroke="#00FF88" strokeWidth="0.8" />
-              <text x="130" y="96" fill="#00FF88" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">YEAR: 2024</text>
+              <rect x="114" y="106" width="82" height="17" rx="3" fill="#13241B" stroke="#00FF88" strokeWidth="1" />
+              <text x="155" y="117" fill="#00FF88" fontSize="6" fontWeight="bold" textAnchor="middle" fontFamily="monospace">YEAR: 2024</text>
 
-              <rect x="175" y="87" width="85" height="14" rx="2" fill="#13241B" stroke="#00FF88" strokeWidth="0.8" />
-              <text x="217" y="96" fill="#00FF88" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">PAGES: 112–129</text>
+              <rect x="206" y="106" width="100" height="17" rx="3" fill="#13241B" stroke="#00FF88" strokeWidth="1" />
+              <text x="256" y="117" fill="#00FF88" fontSize="6" fontWeight="bold" textAnchor="middle" fontFamily="monospace">PAGES: 112–129</text>
 
-              <rect x="270" y="87" width="100" height="14" rx="2" fill="#13241B" stroke="#FBBF24" strokeWidth="0.8" />
-              <text x="320" y="96" fill="#FBBF24" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">DOI-042 (SIMULATED)</text>
+              <rect x="316" y="106" width="118" height="17" rx="3" fill="#13241B" stroke="#FBBF24" strokeWidth="1" />
+              <text x="375" y="117" fill="#FBBF24" fontSize="6" fontWeight="bold" textAnchor="middle" fontFamily="monospace">DOI-042 (SIMULATED)</text>
 
               {/* Abstract & Article Text Lines */}
-              <line x1="95" y1="110" x2="365" y2="110" stroke="#2A3D32" strokeWidth="1" />
-              <text x="95" y="120" fill="#87968D" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">ABSTRACT</text>
+              <line x1="114" y1="134" x2="430" y2="134" stroke="#2A3D32" strokeWidth="1.2" />
+              <text x="114" y="146" fill="#87968D" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">ABSTRACT</text>
 
               {/* Text Lines */}
-              <line x1="95" y1="128" x2="220" y2="128" stroke="#4B6354" strokeWidth="2" />
-              <line x1="95" y1="136" x2="225" y2="136" stroke="#4B6354" strokeWidth="2" />
-              <line x1="95" y1="144" x2="215" y2="144" stroke="#4B6354" strokeWidth="2" />
-              <line x1="95" y1="152" x2="210" y2="152" stroke="#4B6354" strokeWidth="2" />
+              <line x1="114" y1="156" x2="260" y2="156" stroke="#4B6354" strokeWidth="2.5" />
+              <line x1="114" y1="165" x2="265" y2="165" stroke="#4B6354" strokeWidth="2.5" />
+              <line x1="114" y1="174" x2="255" y2="174" stroke="#4B6354" strokeWidth="2.5" />
+              <line x1="114" y1="183" x2="250" y2="183" stroke="#4B6354" strokeWidth="2.5" />
 
-              <line x1="240" y1="128" x2="365" y2="128" stroke="#4B6354" strokeWidth="2" />
-              <line x1="240" y1="136" x2="360" y2="136" stroke="#4B6354" strokeWidth="2" />
-              <line x1="240" y1="144" x2="350" y2="144" stroke="#4B6354" strokeWidth="2" />
-              <line x1="240" y1="152" x2="330" y2="152" stroke="#4B6354" strokeWidth="2" />
+              <line x1="280" y1="156" x2="430" y2="156" stroke="#4B6354" strokeWidth="2.5" />
+              <line x1="280" y1="165" x2="425" y2="165" stroke="#4B6354" strokeWidth="2.5" />
+              <line x1="280" y1="174" x2="415" y2="174" stroke="#4B6354" strokeWidth="2.5" />
+              <line x1="280" y1="183" x2="390" y2="183" stroke="#4B6354" strokeWidth="2.5" />
 
               {/* Authoritative Stamp */}
-              <circle cx="345" cy="177" r="16" fill="#0F2417" stroke="#00FF88" strokeWidth="1.5" />
-              <text x="345" y="175" fill="#00FF88" fontSize="4.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">INDEXED</text>
-              <text x="345" y="181" fill="#00FF88" fontSize="4.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">SCHOLARLY</text>
+              <circle cx="405" cy="204" r="18" fill="#0F2417" stroke="#00FF88" strokeWidth="1.8" />
+              <text x="405" y="202" fill="#00FF88" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">INDEXED</text>
+              <text x="405" y="209" fill="#00FF88" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">SCHOLARLY</text>
             </svg>
 
-            <p className="font-body text-sm sm:text-base text-[#D1DDD5] max-w-lg mx-auto">
-              A convincing academic paper reference materializes, complete with title, authors, journal, and page numbers.
+            <p className="font-body text-base sm:text-lg text-[#E4F0E8] max-w-xl mx-auto font-medium">
+              A convincing academic citation materializes with authentic formatting, plausible authors, a journal title, and publication volume.
             </p>
           </div>
         )}
 
         {/* ----------------------------------------------------------------- */}
-        {/* SCENE 03 — THE FALSE CONFIDENCE (Pasted into Bibliography)        */}
+        {/* SCENE 03 — THE ILLUSION (Pasted into Bibliography)                */}
         {/* ----------------------------------------------------------------- */}
         {currentStep === 3 && (
           <div className="w-full flex flex-col items-center animate-fadeIn text-center">
-            <svg viewBox="0 0 460 210" className="w-full max-w-[460px] h-56 sm:h-64 mb-2">
+            <svg viewBox="0 0 540 240" className="w-full max-w-[680px] sm:max-w-[740px] h-64 sm:h-72 md:h-80 mb-3">
               {/* Left Side: Generated Citation */}
-              <rect x="25" y="25" width="180" height="150" rx="4" fill="#0A120D" stroke="#00FF88" strokeWidth="1.5" />
-              <rect x="26" y="26" width="178" height="20" rx="2" fill="#112217" />
-              <text x="35" y="39" fill="#00FF88" fontSize="5" fontFamily="monospace">AI_GENERATOR</text>
+              <rect x="25" y="25" width="215" height="185" rx="5" fill="#0A120D" stroke="#00FF88" strokeWidth="1.8" />
+              <rect x="26" y="26" width="213" height="24" rx="3" fill="#112217" />
+              <text x="36" y="42" fill="#00FF88" fontSize="6" fontFamily="monospace" fontWeight="bold">AI_OUTPUT // PLAUSIBLE RESULT</text>
 
               {/* Selected Text Highlight */}
-              <rect x="35" y="55" width="160" height="50" rx="2" fill="#00FF88" fillOpacity="0.15" stroke="#00FF88" strokeWidth="1" strokeDasharray="3 2" />
-              <text x="40" y="67" fill="#FFFFFF" fontSize="5.5" fontWeight="bold" fontFamily="serif">Vance, E. R., &amp; Rostova, K. (2024).</text>
-              <text x="40" y="77" fill="#00FF88" fontSize="5" fontFamily="serif">Adaptive Graph Pruning for Latent Graphs.</text>
-              <text x="40" y="87" fill="#D1DDD5" fontSize="4.5" fontFamily="serif">Int. J. Neural Synthetics, 14(3), 112–129.</text>
-              <text x="40" y="97" fill="#FBBF24" fontSize="4.5" fontFamily="monospace">DOI-042</text>
+              <rect x="36" y="60" width="193" height="60" rx="3" fill="#00FF88" fillOpacity="0.15" stroke="#00FF88" strokeWidth="1.2" strokeDasharray="3 2" />
+              <text x="42" y="74" fill="#FFFFFF" fontSize="6.5" fontWeight="bold" fontFamily="serif">Vance, E. R., &amp; Rostova, K. (2024).</text>
+              <text x="42" y="86" fill="#00FF88" fontSize="6" fontFamily="serif">Adaptive Graph Pruning for Latent Graphs.</text>
+              <text x="42" y="98" fill="#D1DDD5" fontSize="5.5" fontFamily="serif">Int. J. Neural Synthetics, 14(3), 112–129.</text>
+              <text x="42" y="110" fill="#FBBF24" fontSize="5.5" fontFamily="monospace">DOI-042</text>
 
               {/* Animated Copy Arrow */}
-              <path d="M 210 90 Q 240 65 270 90" fill="none" stroke="#00FF88" strokeWidth="2.5" strokeDasharray="5 3" />
-              <polygon points="274,91 265,85 267,94" fill="#00FF88" />
-              <rect x="220" y="60" width="40" height="14" rx="2" fill="#00FF88" />
-              <text x="240" y="69" fill="#050807" fontSize="5.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">PASTE</text>
+              <path d="M 245 105 Q 275 75 305 105" fill="none" stroke="#00FF88" strokeWidth="3" strokeDasharray="6 3" />
+              <polygon points="310,106 300,99 302,110" fill="#00FF88" />
+              <rect x="255" y="70" width="48" height="17" rx="3" fill="#00FF88" />
+              <text x="279" y="81" fill="#050807" fontSize="6.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">PASTE</text>
 
               {/* Right Side: Assignment Bibliography */}
-              <rect x="275" y="25" width="160" height="150" rx="4" fill="#0A120D" stroke="#3A5243" strokeWidth="1.5" />
-              <rect x="276" y="26" width="158" height="20" rx="2" fill="#141E17" />
-              <text x="285" y="39" fill="#E4F0E8" fontSize="5" fontFamily="monospace">BIBLIOGRAPHY</text>
+              <rect x="315" y="25" width="200" height="185" rx="5" fill="#0A120D" stroke="#3A5243" strokeWidth="1.8" />
+              <rect x="316" y="26" width="198" height="24" rx="3" fill="#141E17" />
+              <text x="326" y="42" fill="#E4F0E8" fontSize="6" fontFamily="monospace" fontWeight="bold">TERM_PAPER_BIBLIOGRAPHY</text>
 
-              {/* Bibliography Header */}
-              <text x="285" y="61" fill="#FFFFFF" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">REFERENCES</text>
-              <line x1="285" y1="67" x2="420" y2="67" stroke="#2A3D32" strokeWidth="1" />
+              {/* References Header */}
+              <text x="326" y="66" fill="#FFFFFF" fontSize="7.5" fontWeight="bold" fontFamily="sans-serif">REFERENCES</text>
+              <line x1="326" y1="73" x2="495" y2="73" stroke="#2A3D32" strokeWidth="1.2" />
 
               {/* Inserted Citation Box with Amber Warning Border */}
-              <rect x="285" y="75" width="140" height="48" rx="2" fill="#16180E" stroke="#F59E0B" strokeWidth="1.5" />
-              <text x="290" y="87" fill="#FBBF24" fontSize="5" fontWeight="bold" fontFamily="monospace">[1] Vance &amp; Rostova (2024)</text>
-              <text x="290" y="96" fill="#E4F0E8" fontSize="4.5" fontFamily="serif">Adaptive Graph Pruning...</text>
-              <text x="290" y="105" fill="#87968D" fontSize="4" fontFamily="serif">Int. J. Neural Synthetics, 14(3)</text>
-              <text x="290" y="115" fill="#F59E0B" fontSize="4" fontFamily="monospace">DOI-042</text>
+              <rect x="326" y="82" width="178" height="58" rx="3" fill="#16180E" stroke="#F59E0B" strokeWidth="1.8" />
+              <text x="333" y="96" fill="#FBBF24" fontSize="6" fontWeight="bold" fontFamily="monospace">[1] Vance &amp; Rostova (2024)</text>
+              <text x="333" y="107" fill="#E4F0E8" fontSize="5.5" fontFamily="serif">Adaptive Graph Pruning...</text>
+              <text x="333" y="118" fill="#87968D" fontSize="5" fontFamily="serif">Int. J. Neural Synthetics, 14(3)</text>
+              <text x="333" y="130" fill="#F59E0B" fontSize="5" fontFamily="monospace">DOI-042</text>
 
-              {/* Subtle Amber Callout */}
-              <rect x="285" y="131" width="140" height="32" rx="2" fill="#2E1805" stroke="#F59E0B" strokeWidth="1" />
-              <circle cx="297" cy="147" r="5" fill="#F59E0B" />
-              <text x="297" y="150" fill="#050807" fontSize="7" fontWeight="bold" textAnchor="middle">!</text>
-              <text x="306" y="143" fill="#FBBF24" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">UNVERIFIED REFERENCE</text>
-              <text x="306" y="152" fill="#FCD34D" fontSize="4" fontFamily="sans-serif">Format does not guarantee existence.</text>
+              {/* Warning Callout Box */}
+              <rect x="326" y="148" width="178" height="38" rx="3" fill="#2E1805" stroke="#F59E0B" strokeWidth="1.2" />
+              <circle cx="340" cy="167" r="6" fill="#F59E0B" />
+              <text x="340" y="171" fill="#050807" fontSize="8" fontWeight="bold" textAnchor="middle">!</text>
+              <text x="352" y="163" fill="#FBBF24" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">UNVERIFIED REFERENCE</text>
+              <text x="352" y="174" fill="#FCD34D" fontSize="5" fontFamily="sans-serif">Looking academic does not mean it exists.</text>
             </svg>
 
-            <p className="font-body text-sm sm:text-base text-[#D1DDD5] max-w-lg mx-auto">
-              The citation is pasted into the assignment bibliography without independent verification.
+            <p className="font-body text-base sm:text-lg text-[#E4F0E8] max-w-xl mx-auto font-medium">
+              The citation is pasted directly into the assignment bibliography without independent verification.
             </p>
           </div>
         )}
 
         {/* ----------------------------------------------------------------- */}
-        {/* SCENE 04 — THE INVESTIGATION (Registry Mismatch Revealed)          */}
+        {/* SCENE 04 — THE CROSS-CHECK (Registry Mismatch Revealed)            */}
         {/* ----------------------------------------------------------------- */}
         {currentStep === 4 && (
           <div className="w-full flex flex-col items-center animate-fadeIn text-center">
-            <svg viewBox="0 0 460 210" className="w-full max-w-[460px] h-56 sm:h-64 mb-2">
+            <svg viewBox="0 0 540 240" className="w-full max-w-[680px] sm:max-w-[740px] h-64 sm:h-72 md:h-80 mb-3">
               {/* Left Column: Claimed Citation */}
-              <rect x="25" y="20" width="190" height="165" rx="4" fill="#0C130E" stroke="#3A5243" strokeWidth="1.5" />
-              <rect x="26" y="21" width="188" height="22" rx="2" fill="#121D16" />
-              <text x="35" y="35" fill="#87968D" fontSize="5.5" fontWeight="bold" fontFamily="monospace">CLAIMED CITATION</text>
+              <rect x="25" y="20" width="225" height="195" rx="5" fill="#0C130E" stroke="#3A5243" strokeWidth="1.8" />
+              <rect x="26" y="21" width="223" height="26" rx="3" fill="#121D16" />
+              <text x="36" y="38" fill="#87968D" fontSize="6.5" fontWeight="bold" fontFamily="monospace">CLAIMED CITATION</text>
 
-              <text x="35" y="55" fill="#87968D" fontSize="4.5" fontFamily="monospace">TITLE:</text>
-              <text x="35" y="64" fill="#FFFFFF" fontSize="5" fontWeight="bold" fontFamily="sans-serif">Adaptive Graph Pruning for Latent Graphs</text>
+              <text x="36" y="62" fill="#87968D" fontSize="5" fontFamily="monospace">TITLE:</text>
+              <text x="36" y="73" fill="#FFFFFF" fontSize="6" fontWeight="bold" fontFamily="sans-serif">Adaptive Graph Pruning for Latent Graphs</text>
 
-              <text x="35" y="80" fill="#87968D" fontSize="4.5" fontFamily="monospace">AUTHORS:</text>
-              <text x="35" y="89" fill="#FFFFFF" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">E. R. Vance &amp; K. Rostova</text>
+              <text x="36" y="93" fill="#87968D" fontSize="5" fontFamily="monospace">AUTHORS:</text>
+              <text x="36" y="104" fill="#FFFFFF" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">E. R. Vance &amp; K. Rostova</text>
 
-              <text x="35" y="105" fill="#87968D" fontSize="4.5" fontFamily="monospace">JOURNAL:</text>
-              <text x="35" y="114" fill="#FFFFFF" fontSize="5" fontFamily="serif" fontStyle="italic">Int. J. Neural Synthetics (2024)</text>
+              <text x="36" y="124" fill="#87968D" fontSize="5" fontFamily="monospace">JOURNAL:</text>
+              <text x="36" y="135" fill="#FFFFFF" fontSize="6" fontFamily="serif" fontStyle="italic">Int. J. Neural Synthetics (2024)</text>
 
-              <text x="35" y="130" fill="#87968D" fontSize="4.5" fontFamily="monospace">IDENTIFIER:</text>
-              <rect x="35" y="135" width="80" height="15" rx="2" fill="#142B1D" stroke="#00FF88" strokeWidth="1" />
-              <text x="40" y="145" fill="#00FF88" fontSize="5.5" fontWeight="bold" fontFamily="monospace">DOI-042</text>
+              <text x="36" y="155" fill="#87968D" fontSize="5" fontFamily="monospace">IDENTIFIER:</text>
+              <rect x="36" y="161" width="95" height="18" rx="3" fill="#142B1D" stroke="#00FF88" strokeWidth="1.2" />
+              <text x="42" y="173" fill="#00FF88" fontSize="6.5" fontWeight="bold" fontFamily="monospace">DOI-042</text>
 
-              {/* Query Beam */}
-              <path d="M 120 143 L 240 143" stroke="#00FF88" strokeWidth="2" strokeDasharray="3 2" />
-              <polygon points="245,143 238,139 238,147" fill="#00FF88" />
+              {/* Query Beam across to Registry */}
+              <path d="M 135 170 L 285 170" stroke="#00FF88" strokeWidth="2.5" strokeDasharray="4 2" />
+              <polygon points="290,170 282,165 282,175" fill="#00FF88" />
 
               {/* Right Column: Actual Simulated Registry Record */}
-              <rect x="245" y="20" width="190" height="165" rx="4" fill="#160B0D" stroke="#F43F5E" strokeWidth="2" />
-              <rect x="246" y="21" width="188" height="22" rx="2" fill="#240D11" />
-              <text x="255" y="35" fill="#F43F5E" fontSize="5.5" fontWeight="bold" fontFamily="monospace">REGISTRY RECORD: DOI-042</text>
+              <rect x="290" y="20" width="225" height="195" rx="5" fill="#160B0D" stroke="#F43F5E" strokeWidth="2.2" />
+              <rect x="291" y="21" width="223" height="26" rx="3" fill="#240D11" />
+              <text x="301" y="38" fill="#F43F5E" fontSize="6.5" fontWeight="bold" fontFamily="monospace">REGISTRY RECORD: DOI-042</text>
 
               {/* Mismatched Fields (Red Highlights) */}
-              <rect x="252" y="47" width="176" height="22" rx="2" fill="#380F16" stroke="#F43F5E" strokeWidth="1" />
-              <text x="256" y="56" fill="#FCA5A5" fontSize="4" fontFamily="monospace">TITLE MISMATCH:</text>
-              <text x="256" y="64" fill="#FECDD3" fontSize="5" fontWeight="bold" fontFamily="sans-serif">"Efficient Graph Pruning for Knowledge Retrieval"</text>
+              <rect x="298" y="53" width="208" height="26" rx="3" fill="#380F16" stroke="#F43F5E" strokeWidth="1.2" />
+              <text x="304" y="63" fill="#FCA5A5" fontSize="4.5" fontFamily="monospace">TITLE MISMATCH:</text>
+              <text x="304" y="73" fill="#FECDD3" fontSize="6" fontWeight="bold" fontFamily="sans-serif">"Efficient Graph Pruning for Knowledge Retrieval"</text>
 
-              <rect x="252" y="73" width="176" height="22" rx="2" fill="#380F16" stroke="#F43F5E" strokeWidth="1" />
-              <text x="256" y="82" fill="#FCA5A5" fontSize="4" fontFamily="monospace">AUTHORS MISMATCH:</text>
-              <text x="256" y="90" fill="#FECDD3" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">N. Patel &amp; S. Huang</text>
+              <rect x="298" y="85" width="208" height="26" rx="3" fill="#380F16" stroke="#F43F5E" strokeWidth="1.2" />
+              <text x="304" y="95" fill="#FCA5A5" fontSize="4.5" fontFamily="monospace">AUTHORS MISMATCH:</text>
+              <text x="304" y="105" fill="#FECDD3" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">N. Patel &amp; S. Huang</text>
 
-              <rect x="252" y="99" width="176" height="22" rx="2" fill="#380F16" stroke="#F43F5E" strokeWidth="1" />
-              <text x="256" y="108" fill="#FCA5A5" fontSize="4" fontFamily="monospace">JOURNAL MISMATCH:</text>
-              <text x="256" y="116" fill="#FECDD3" fontSize="5" fontFamily="serif" fontStyle="italic">Journal of Computational Networks (2023)</text>
+              <rect x="298" y="117" width="208" height="26" rx="3" fill="#380F16" stroke="#F43F5E" strokeWidth="1.2" />
+              <text x="304" y="127" fill="#FCA5A5" fontSize="4.5" fontFamily="monospace">JOURNAL MISMATCH:</text>
+              <text x="304" y="137" fill="#FECDD3" fontSize="6" fontFamily="serif" fontStyle="italic">Journal of Computational Networks (2023)</text>
 
               {/* Mismatch Warning Banner */}
-              <rect x="252" y="127" width="176" height="24" rx="2" fill="#F43F5E" />
-              <text x="340" y="138" fill="#050807" fontSize="5.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">CONFLICTING METADATA</text>
-              <text x="340" y="146" fill="#050807" fontSize="4.5" textAnchor="middle" fontFamily="monospace">Supplied ID belongs to another paper.</text>
+              <rect x="298" y="150" width="208" height="28" rx="3" fill="#F43F5E" />
+              <text x="402" y="163" fill="#050807" fontSize="6.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">CONFLICTING METADATA</text>
+              <text x="402" y="172" fill="#050807" fontSize="5.5" textAnchor="middle" fontFamily="monospace">Supplied ID belongs to another publication.</text>
             </svg>
 
-            <p className="font-body text-sm sm:text-base text-[#D1DDD5] max-w-lg mx-auto">
-              A simulated registry lookup reveals conflicting title, authors, and journal for identifier <span className="font-mono text-rose-400 font-bold">DOI-042</span>.
+            <p className="font-body text-base sm:text-lg text-[#E4F0E8] max-w-xl mx-auto font-medium">
+              A registry lookup reveals conflicting title, authors, and journal for identifier <span className="font-mono text-rose-400 font-bold">DOI-042</span>.
             </p>
           </div>
         )}
 
         {/* ----------------------------------------------------------------- */}
-        {/* SCENE 05 — THE REVEAL (Clean Visual Revelation Stamp)             */}
+        {/* SCENE 05 — FORENSIC VERDICT (Stamp & Key Lesson)                  */}
         {/* ----------------------------------------------------------------- */}
         {currentStep === 5 && (
           <div className="w-full flex flex-col items-center animate-fadeIn text-center">
-            <svg viewBox="0 0 460 210" className="w-full max-w-[460px] h-56 sm:h-64 mb-2">
+            <svg viewBox="0 0 540 240" className="w-full max-w-[680px] sm:max-w-[740px] h-64 sm:h-72 md:h-80 mb-3">
               {/* Fractured Paper Canvas */}
-              <rect x="60" y="15" width="340" height="175" rx="4" fill="#0C100D" stroke="#F43F5E" strokeWidth="2.5" />
+              <rect x="70" y="15" width="400" height="205" rx="5" fill="#0C100D" stroke="#F43F5E" strokeWidth="2.8" />
               
               {/* Paper Details */}
-              <text x="80" y="45" fill="#87968D" fontSize="6" fontFamily="monospace">CLAIMED SPECIMEN // DOI-042</text>
-              <text x="80" y="65" fill="#FFFFFF" fontSize="9.5" fontWeight="bold" fontFamily="serif">Adaptive Graph Pruning for Latent Knowledge Graphs</text>
-              <text x="80" y="80" fill="#D1DDD5" fontSize="6.5" fontFamily="sans-serif">Authors: E. R. Vance &amp; K. Rostova • Int. J. Neural Synthetics (2024)</text>
+              <text x="95" y="48" fill="#87968D" fontSize="7" fontFamily="monospace">CLAIMED SPECIMEN // DOI-042</text>
+              <text x="95" y="72" fill="#FFFFFF" fontSize="11" fontWeight="bold" fontFamily="serif">Adaptive Graph Pruning for Latent Knowledge Graphs</text>
+              <text x="95" y="90" fill="#D1DDD5" fontSize="7.5" fontFamily="sans-serif">Authors: E. R. Vance &amp; K. Rostova • Int. J. Neural Synthetics (2024)</text>
 
               {/* Visual Conflict Separator Line */}
-              <line x1="80" y1="95" x2="380" y2="95" stroke="#F43F5E" strokeWidth="1" strokeDasharray="4 3" opacity="0.6" />
+              <line x1="95" y1="108" x2="445" y2="108" stroke="#F43F5E" strokeWidth="1.2" strokeDasharray="5 3" opacity="0.6" />
 
               {/* Three Clean Visual Indicator Pills */}
-              <g transform="translate(80, 105)">
-                <rect x="0" y="0" width="90" height="18" rx="3" fill="#240D11" stroke="#F43F5E" strokeWidth="1" />
-                <circle cx="10" cy="9" r="3" fill="#F43F5E" />
-                <text x="20" y="12" fill="#FECDD3" fontSize="5.5" fontWeight="bold" fontFamily="monospace">ID CLASH</text>
+              <g transform="translate(95, 120)">
+                <rect x="0" y="0" width="105" height="22" rx="4" fill="#240D11" stroke="#F43F5E" strokeWidth="1.2" />
+                <circle cx="12" cy="11" r="3.5" fill="#F43F5E" />
+                <text x="24" y="15" fill="#FECDD3" fontSize="6.5" fontWeight="bold" fontFamily="monospace">ID CLASH</text>
               </g>
 
-              <g transform="translate(180, 105)">
-                <rect x="0" y="0" width="100" height="18" rx="3" fill="#240D11" stroke="#F43F5E" strokeWidth="1" />
-                <circle cx="10" cy="9" r="3" fill="#F43F5E" />
-                <text x="20" y="12" fill="#FECDD3" fontSize="5.5" fontWeight="bold" fontFamily="monospace">ISSUE ABSENCE</text>
+              <g transform="translate(215, 120)">
+                <rect x="0" y="0" width="115" height="22" rx="4" fill="#240D11" stroke="#F43F5E" strokeWidth="1.2" />
+                <circle cx="12" cy="11" r="3.5" fill="#F43F5E" />
+                <text x="24" y="15" fill="#FECDD3" fontSize="6.5" fontWeight="bold" fontFamily="monospace">ISSUE ABSENCE</text>
               </g>
 
-              <g transform="translate(290, 105)">
-                <rect x="0" y="0" width="90" height="18" rx="3" fill="#240D11" stroke="#F43F5E" strokeWidth="1" />
-                <circle cx="10" cy="9" r="3" fill="#F43F5E" />
-                <text x="20" y="12" fill="#FECDD3" fontSize="5.5" fontWeight="bold" fontFamily="monospace">UNVERIFIED</text>
+              <g transform="translate(345, 120)">
+                <rect x="0" y="0" width="100" height="22" rx="4" fill="#240D11" stroke="#F43F5E" strokeWidth="1.2" />
+                <circle cx="12" cy="11" r="3.5" fill="#F43F5E" />
+                <text x="24" y="15" fill="#FECDD3" fontSize="6.5" fontWeight="bold" fontFamily="monospace">UNVERIFIED</text>
               </g>
 
               {/* Bold Red Forensic Stamp Clamped across paper */}
-              <g transform="rotate(-6 230 148)">
-                <rect x="95" y="132" width="270" height="36" rx="4" fill="#F43F5E" fillOpacity="0.2" stroke="#F43F5E" strokeWidth="3" />
-                <text x="230" y="156" fill="#F43F5E" fontSize="14" fontWeight="900" textAnchor="middle" fontFamily="monospace" letterSpacing="3">
+              <g transform="rotate(-6 270 172)">
+                <rect x="110" y="152" width="320" height="42" rx="5" fill="#F43F5E" fillOpacity="0.22" stroke="#F43F5E" strokeWidth="3.5" />
+                <text x="270" y="180" fill="#F43F5E" fontSize="16" fontWeight="900" textAnchor="middle" fontFamily="monospace" letterSpacing="3">
                   REFERENCE NOT VERIFIED
                 </text>
               </g>
             </svg>
 
-            <p className="font-body text-sm sm:text-base text-[#D1DDD5] max-w-lg mx-auto">
-              Looking academic does not make a source real. Independent verification is essential.
+            <p className="font-body text-base sm:text-lg text-[#E4F0E8] max-w-xl mx-auto font-medium">
+              Looking academic does not make a source real. Independent verification of original scholarship is mandatory.
             </p>
           </div>
         )}

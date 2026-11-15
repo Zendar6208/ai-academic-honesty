@@ -82,7 +82,7 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
             <span className="text-[#00FF88] text-sm animate-pulse">★</span>
             <div className="font-mono text-xs md:text-sm font-bold text-[#E4F0E8] tracking-wider">
               <span className="text-[#00FF88]">{score}</span>
-              <span className="text-[#87968D] text-[10px] ml-1">/ 600 PTS</span>
+              <span className="text-[#87968D] text-[10px] ml-1">/ 450 PTS</span>
             </div>
           </div>
 

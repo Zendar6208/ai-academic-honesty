@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import type { ExhibitData, GameOption } from '../../types/game';
+import { Exhibit04MotionGraphic } from '../MotionGraphics/Exhibit04MotionGraphic';
 import { Exhibit04RepairWorkflowGame } from './Exhibit04RepairWorkflowGame';
 import { ArrowDown } from 'lucide-react';
 
@@ -35,7 +36,7 @@ export const Exhibit04Stage: React.FC<Exhibit04StageProps> = ({
     <div className="w-full">
       
       {/* =================================================================== */}
-      {/* PART 1 & 2: EDUCATIONAL INTRODUCTION & TAKEAWAY                     */}
+      {/* PART 1 & 2: EDUCATIONAL INTRODUCTION, MOTION GRAPHIC & TAKEAWAY     */}
       {/* =================================================================== */}
       <section
         id="exhibit-04"
@@ -52,7 +53,7 @@ export const Exhibit04Stage: React.FC<Exhibit04StageProps> = ({
         }}
         aria-label="Exhibit 04: Repair the Workflow"
       >
-        <div className="exhibition-container" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <div className="exhibition-container" style={{ maxWidth: '1140px', margin: '0 auto', width: '100%' }}>
           
           {/* 1. Small Identifier */}
           <div className="pb-3 mb-6 border-b border-emerald-500/20">
@@ -105,7 +106,10 @@ export const Exhibit04Stage: React.FC<Exhibit04StageProps> = ({
             </p>
           </div>
 
-          {/* 3. Major Takeaway Banner */}
+          {/* 3. Seven-Scene Cinematic Motion Graphic */}
+          <Exhibit04MotionGraphic />
+
+          {/* 4. Major Takeaway Banner */}
           <div className="bg-[#09140E] border-2 border-emerald-500/40 rounded-2xl p-6 sm:p-8 shadow-[0_15px_40px_rgba(0,0,0,0.7)] mb-10 text-center">
             <h3 
               style={{
@@ -122,12 +126,12 @@ export const Exhibit04Stage: React.FC<Exhibit04StageProps> = ({
             </h3>
           </div>
 
-          {/* 4. Smooth Transition Button to Interactive Activity */}
+          {/* 5. Smooth Transition Button to Interactive Activity */}
           <div className="flex justify-start pt-3">
             <button
               type="button"
               onClick={scrollToActivity}
-              className="exhibit-btn-pill"
+              className="exhibit-btn-pill cursor-pointer"
             >
               <span>Repair the workflow in the interactive challenge below</span>
               <ArrowDown size={16} className="text-[#00FF88]" />

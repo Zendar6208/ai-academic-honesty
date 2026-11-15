@@ -316,7 +316,7 @@ export const CinematicOpening: React.FC<CinematicOpeningProps> = ({ onEnter }) =
         }}
       >
         <span style={{ color: '#87968D' }}>STATUS: SYSTEM READY</span>
-        <span style={{ color: '#00FF88' }}>4 INTERACTIVE EXHIBITS • 600 PTS</span>
+        <span style={{ color: '#00FF88' }}>4 EXHIBITS • 3 ASSESSMENTS • 450 PTS</span>
       </div>
     </div>
   );
