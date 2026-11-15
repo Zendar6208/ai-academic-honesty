@@ -16,6 +16,7 @@ import { ExhibitStage } from './components/Game/ExhibitStage';
 import { FinalScoreScreen } from './components/Game/FinalScoreScreen';
 import { Footer } from './components/Footer/Footer';
 import { ResetConfirmModal } from './components/Game/ResetConfirmModal';
+import { Analytics } from '@vercel/analytics/react';
 
 interface SectionInfo {
   id: string;
@@ -577,6 +578,8 @@ export function App() {
         onCancel={() => setIsResetModalOpen(false)}
         onConfirm={handleConfirmReset}
       />
+
+      <Analytics />
     </div>
   );
 }
